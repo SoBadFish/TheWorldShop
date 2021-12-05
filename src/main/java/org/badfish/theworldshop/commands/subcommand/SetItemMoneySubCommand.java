@@ -25,7 +25,6 @@ public class SetItemMoneySubCommand extends BaseSubCommand {
     public boolean execute(CommandSender sender, String label, String[] args) {
         if(sender instanceof Player){
             if(sender.isOp()){
-
                 if(args.length > 1){
                     double m;
                     try {

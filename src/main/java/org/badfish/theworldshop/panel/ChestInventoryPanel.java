@@ -1,6 +1,7 @@
 package org.badfish.theworldshop.panel;
 
 import cn.nukkit.Player;
+import cn.nukkit.inventory.Inventory;
 import cn.nukkit.inventory.InventoryHolder;
 import cn.nukkit.inventory.InventoryType;
 import cn.nukkit.item.Item;
@@ -14,7 +15,7 @@ import org.badfish.theworldshop.panel.lib.DoubleChestFakeInventory;
 /**
  * @author BadFish
  */
-public class ChestInventoryPanel extends DoubleChestFakeInventory {
+public class ChestInventoryPanel extends DoubleChestFakeInventory implements InventoryHolder{
 
     long id;
 
@@ -58,6 +59,11 @@ public class ChestInventoryPanel extends DoubleChestFakeInventory {
         ListenerEvent.LOOK_ITEMS.remove(who);
         TheWorldShopMainClass.PLAYER_SELL.remove(PlayerSellItemManager.getInstance(who.getName()));
 
+    }
+
+    @Override
+    public Inventory getInventory() {
+        return this;
     }
 
 

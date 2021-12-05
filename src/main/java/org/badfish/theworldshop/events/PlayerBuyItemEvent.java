@@ -9,7 +9,7 @@ import cn.nukkit.item.Item;
 /**
  * @author BadFish
  */
-public class PlayerSellItemEvent extends PlayerEvent implements Cancellable {
+public class PlayerBuyItemEvent extends PlayerEvent implements Cancellable {
 
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
@@ -17,29 +17,26 @@ public class PlayerSellItemEvent extends PlayerEvent implements Cancellable {
         return HANDLER_LIST;
     }
 
-    private Item item;
-
     private double money;
 
-    private boolean isRemove;
+    private Item item;
 
-    public PlayerSellItemEvent(Player player, Item item,double money,boolean isRemove){
+    public PlayerBuyItemEvent(Player player, double money, Item item){
         this.player = player;
-        this.item = item;
         this.money = money;
-        this.isRemove = isRemove;
-    }
-
-    public boolean isRemove() {
-        return isRemove;
-    }
-
-    public void setRemove(boolean remove) {
-        isRemove = remove;
+        this.item = item;
     }
 
     public Item getItem() {
         return item;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     public double getMoney() {

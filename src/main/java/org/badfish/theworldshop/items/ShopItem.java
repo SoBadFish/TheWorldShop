@@ -25,6 +25,9 @@ public class ShopItem  {
     private Item defaultItem;
 
 
+    private boolean isRemove = false;
+
+
     private ShopItem(Item defaultItem,String sellPlayer,double sellMoney) {
         this.defaultItem = defaultItem.clone();
         this.shopItem = defaultItem.clone();
@@ -40,6 +43,14 @@ public class ShopItem  {
             }
         }
         return strings;
+    }
+
+    public boolean isRemove() {
+        return isRemove;
+    }
+
+    public void setRemove(boolean remove) {
+        isRemove = remove;
     }
 
     public static ShopItem formMap(Map map){
@@ -59,8 +70,13 @@ public class ShopItem  {
                 }
             }
             String sellPlayer = map.get("sellPlayer").toString();
+            boolean remove = false;
+            if(map.containsKey("isRemove")){
+                remove = (Boolean) map.get("isRemove");
+            }
             double sellMoney = Double.parseDouble(map.get("sellMoney").toString());
-            return cloneTo(i, sellPlayer, sellMoney);
+
+            return cloneTo(i, sellPlayer, sellMoney,remove);
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -79,7 +95,10 @@ public class ShopItem  {
                         def.setNamedTag(Item.parseCompoundTag(tagForm));
                     }
                 }
-                return new ShopItem(def,tag.getString(TAG+"player"),tag.getDouble(TAG+"money"));
+
+                ShopItem item1 = new ShopItem(def,tag.getString(TAG+"player"),tag.getDouble(TAG+"money"));
+                item1.setRemove(tag.getBoolean(TAG+"isRemove"));
+                return item1;
             }
         }
         return null;
@@ -89,33 +108,52 @@ public class ShopItem  {
         return shopItem;
     }
 
-    public static ShopItem cloneTo(Item defaultItem,String sellPlayer,double sellMoney){
+    public static ShopItem cloneTo(Item defaultItem,String sellPlayer,double sellMoney,boolean isRemove){
         ShopItem item = new ShopItem(defaultItem,null,0);
         item.setSellMoney(sellMoney);
         item.setSellPlayer(sellPlayer);
+        item.setRemove(isRemove);
         String[] loreItem =  item.shopItem.getLore();
         ArrayList<String> lore = new ArrayList<>();
         if(loreItem.length > 0){
             lore = asList(loreItem);
         }
-        double m = TheWorldShopMainClass.
-                WORLD_CONFIG.getTax() * sellMoney;
+        double m = 0;
+        if(TheWorldShopMainClass.WORLD_CONFIG.getTax() > 0) {
+           m = TheWorldShopMainClass.
+                    WORLD_CONFIG.getTax() * sellMoney;
+        }
+
         String m1 = String.format("%.2f",m);
         lore.add(TextFormat.colorize('&',"&r&7■■■■■■■■■■■■■■■■■■■■"));
+
         lore.add(TextFormat.colorize('&',"&r&e出售者     |   &a"+sellPlayer));
-        lore.add(TextFormat.colorize('&',"&r&e价格       |   &a"+(sellMoney + m) + " &r(&e↑"+m1+"&r)"));
-        lore.add(TextFormat.colorize('&',"&r&e当前税收   |   &a"+ (TheWorldShopMainClass.
-                WORLD_CONFIG.getTax() * 100) + "％"));
+        if(isRemove){
+            lore.add(TextFormat.colorize('&',"&r&d官方出售"));
+            lore.add(TextFormat.colorize('&',"&r&e价格       |   &a"+(sellMoney) ));
+        }else{
+            if(TheWorldShopMainClass.WORLD_CONFIG.getTax() > 0){
+                lore.add(TextFormat.colorize('&',"&r&e价格       |   &a"+(sellMoney + m) + " &r(&e↑"+m1+"&r)"));
+                lore.add(TextFormat.colorize('&',"&r&e当前税收   |   &a"+ (TheWorldShopMainClass.
+                        WORLD_CONFIG.getTax() * 100) + "％"));
+            }else{
+                lore.add(TextFormat.colorize('&',"&r&e价格       |   &a"+(sellMoney )));
+            }
+
+        }
+
         lore.add(TextFormat.colorize('&',""));
         lore.add(TextFormat.colorize('&',"&r&l&a      双击购买"));
         lore.add(TextFormat.colorize('&',"&r&7■■■■■■■■■■■■■■■■■■■■"));
 
         item.shopItem.setLore(lore.toArray(new String[0]));
         CompoundTag tag =  item.shopItem.getNamedTag();
+
         tag.putString(TAG+"tag","ShopItem");
         tag.putString(TAG+"type","sell");
         tag.putString(TAG+"player",sellPlayer);
         tag.putDouble(TAG+"money",sellMoney);
+        tag.putBoolean(TAG+"isRemove",isRemove);
         if(defaultItem.hasCompoundTag()) {
             String b = Tool.bytesToHexString(defaultItem.getCompoundTag());
             if(b != null) {

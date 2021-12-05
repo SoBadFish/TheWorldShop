@@ -10,10 +10,10 @@ import java.util.ArrayList;
 /**
  * @author BadFish
  */
-public class OrderCountItem extends BasePanelItem {
+public class SystemShopItem extends BasePanelItem {
 
     public static Item toItem(String name,boolean isSetting){
-        Item i = toItem(Item.get(69),name,new ArrayList<>(), ItemType.ORDER_COUNT);
+        Item i = toItem(Item.get(264),name,new ArrayList<>(), ItemType.SYSTEM_SELL);
         if(isSetting){
             i.addEnchantment(Enchantment.get(1));
         }
@@ -21,8 +21,9 @@ public class OrderCountItem extends BasePanelItem {
     }
 
 
-    public static int getIndex(){
-        return 29;
-    }
 
+
+    public static int getIndex() {
+        return 31;
+    }
 }

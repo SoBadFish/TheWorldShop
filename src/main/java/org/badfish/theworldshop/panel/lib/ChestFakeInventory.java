@@ -13,6 +13,7 @@ import cn.nukkit.network.protocol.BlockEntityDataPacket;
 import cn.nukkit.network.protocol.UpdateBlockPacket;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.ByteOrder;
 import java.util.Collections;
 import java.util.List;
@@ -49,7 +50,13 @@ public class ChestFakeInventory extends AbstractFakeInventory{
 
     void placeChest(Player who, BlockVector3 pos) {
         UpdateBlockPacket updateBlock = new UpdateBlockPacket();
-        updateBlock.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(BlockID.CHEST, 0);
+        if(IS_PM1E){
+            updateBlock.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(471,BlockID.CHEST, 0);
+
+        }else{
+            updateBlock.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(BlockID.CHEST, 0);
+        }
+
         updateBlock.flags = UpdateBlockPacket.FLAG_ALL_PRIORITY;
         updateBlock.x = pos.x;
         updateBlock.y = pos.y;

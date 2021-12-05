@@ -21,8 +21,7 @@ public class LastInventoryItem extends BasePanelItem {
 
     public static Item toItem(Item defaultItem) {
         Item saveItem = defaultItem.clone();
-        defaultItem = defaultItem.clone();
-        Item i =  toItem(defaultItem,null,new ArrayList<>(), ItemType.INVENTORY_ITEM);
-        return saveItem(saveItem, i);
+        Item i =  toItem(saveItem,null,new ArrayList<>(), ItemType.INVENTORY_ITEM);
+        return saveItem(defaultItem, i);
     }
 }

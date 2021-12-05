@@ -25,33 +25,43 @@ public abstract class BasePanelItem {
         tag.putString(ShopItem.TAG + "tag", "ShopItem");
         tag.putString(ShopItem.TAG + "type", type.getName());
         item.setNamedTag(tag);
-        item.setLore(lore.toArray(new String[0]));
+        if(lore.size() > 0) {
+            item.setLore(lore.toArray(new String[0]));
+        }
+
         return item;
     }
 
     protected static Item getItemByTag(Item item) {
-        Item i = Item.get(item.getId(),item.getDamage(),item.getCount());
-        if(item.hasCompoundTag()){
-            CompoundTag tag = item.getNamedTag();
-            if(tag.contains("defaultItem")){
-                byte[] tagForm = Tool.hexStringToBytes(tag.getString("defaultItem"));
-                if(tagForm != null){
-                    i.setNamedTag(Item.parseCompoundTag(tagForm));
-                }
+        CompoundTag tag = item.getNamedTag();
+        String ss = tag.getString("defaultItem");
+        String[] li = ss.split(":");
+        Item item1 = Item.get(Integer.parseInt(li[0]),Integer.parseInt(li[1]),Integer.parseInt(li[2]));
+        if(!"not".equalsIgnoreCase(li[3])){
+            byte[] b = Tool.hexStringToBytes(li[3]);
+            if(b != null) {
+                CompoundTag compoundTag = Item.parseCompoundTag(b);
+                item1.setNamedTag(compoundTag);
             }
         }
-        return i;
+        return item1;
+
+
+//        return NBTIO.getItemHelper(tag.getCompound("defaultItem"));
+
     }
     protected static Item saveItem(Item saveItem, Item i) {
-        if(saveItem.hasCompoundTag()) {
-            CompoundTag tag = saveItem.getNamedTag();
-            String b = Tool.bytesToHexString(saveItem.getCompoundTag());
-            if(b != null) {
-                tag.putString("defaultItem", b);
-            }
-            i.setNamedTag(tag);
+        Item s = saveItem.clone();
+        CompoundTag tag = i.getNamedTag();
+        String sa = "not";
+        if(s.hasCompoundTag()){
+            sa = Tool.bytesToHexString(s.getCompoundTag());
         }
+        sa = s.getId() + ":" + s.getDamage() + ":" + s.getCount() + ":" + sa;
+        tag.putString("defaultItem",sa);
+        i.setNamedTag(tag);
         return i;
     }
+
 
 }

@@ -22,6 +22,10 @@ public enum  ItemType {
     ORDER("orderMoney"),
     /**顺序*/
     ORDER_COUNT("orderCount"),
+    /**系统出售*/
+    SYSTEM_SELL("systemSell"),
+    /**玩家出售*/
+    PLAYER_SELL("playerSell"),
     /**玩家*/
     PLAYER("player"),
     /**玩家*/

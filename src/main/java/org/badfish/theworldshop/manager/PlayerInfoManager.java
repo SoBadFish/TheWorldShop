@@ -1,5 +1,7 @@
 package org.badfish.theworldshop.manager;
 
+import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.item.Item;
 import org.badfish.theworldshop.items.ItemType;
 
@@ -9,6 +11,8 @@ import java.util.ArrayList;
  * @author BadFish
  */
 public class PlayerInfoManager {
+
+    private boolean isWindows = true;
 
     private static ArrayList<PlayerInfoManager> INFO_MANAGER = new ArrayList<>();
 
@@ -24,6 +28,14 @@ public class PlayerInfoManager {
 
     private PlayerInfoManager(String playerName){
         this.playerName = playerName;
+    }
+
+    public void setWindows(boolean windows) {
+        isWindows = windows;
+    }
+
+    public boolean isWindows() {
+        return isWindows;
     }
 
     public void setPage(int page) {
@@ -77,6 +89,10 @@ public class PlayerInfoManager {
 
     public static PlayerInfoManager getInstance(String playerName){
         PlayerInfoManager infoManager = new PlayerInfoManager(playerName);
+        Player player = Server.getInstance().getPlayer(playerName);
+        if(player != null){
+            infoManager.setWindows(player.getLoginChainData().getDeviceOS() == 7);
+        }
         if(!PlayerInfoManager.INFO_MANAGER.contains(infoManager)){
             PlayerInfoManager.INFO_MANAGER.add(infoManager);
         }

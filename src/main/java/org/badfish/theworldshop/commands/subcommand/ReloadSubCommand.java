@@ -1,16 +1,15 @@
 package org.badfish.theworldshop.commands.subcommand;
 
-import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
+import org.badfish.theworldshop.TheWorldShopMainClass;
 import org.badfish.theworldshop.commands.base.BaseSubCommand;
-import org.badfish.theworldshop.panel.DisplayPanel;
 
 /**
  * @author BadFish
  */
-public class SellItemSubCommand extends BaseSubCommand {
-    public SellItemSubCommand(String name) {
+public class ReloadSubCommand extends BaseSubCommand {
+    public ReloadSubCommand(String name) {
         super(name);
     }
 
@@ -21,9 +20,9 @@ public class SellItemSubCommand extends BaseSubCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        if(sender instanceof Player) {
-            DisplayPanel panel = new DisplayPanel();
-            panel.displayPlayer((Player) sender,DisplayPanel.inventorySellItemPanel((Player) sender),"物品回收");
+        if(sender.isOp()){
+            TheWorldShopMainClass.MAIN_INSTANCE.loadConfig();
+            sender.sendMessage("配置文件已重载");
         }
         return true;
     }

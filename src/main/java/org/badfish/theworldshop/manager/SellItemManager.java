@@ -55,6 +55,32 @@ public class SellItemManager {
     public ArrayList<ShopItem> getPlayerAllShopItem(String playerName){
         return getPlayerAllShopItem(playerName,sellItems);
     }
+    /**
+     * 筛选系统商店
+     * @param sellItems 物品列表
+     * */
+    public ArrayList<ShopItem> getSystemItemShopItem(ArrayList<ShopItem> sellItems){
+        ArrayList<ShopItem> shopItems = new ArrayList<>();
+        for(ShopItem shopItem:sellItems){
+            if(shopItem.isRemove()){
+                shopItems.add(shopItem);
+            }
+        }
+        return shopItems;
+    }
+    /**
+     * 筛选非系统商店
+     * @param sellItems 物品列表
+     * */
+    public ArrayList<ShopItem> getPlayerItemShopItem(ArrayList<ShopItem> sellItems){
+        ArrayList<ShopItem> shopItems = new ArrayList<>();
+        for(ShopItem shopItem:sellItems){
+            if(!shopItem.isRemove()){
+                shopItems.add(shopItem);
+            }
+        }
+        return shopItems;
+    }
 
     public ArrayList<ShopItem> getPlayerAllShopItem(String playerName,ArrayList<ShopItem> sellItems){
         ArrayList<ShopItem> shopItems = new ArrayList<>();
@@ -118,6 +144,8 @@ public class SellItemManager {
     }
 
 
+
+
     public ArrayList<ShopItem> orderByPage(int page,ArrayList<ShopItem> shopItems){
         return getArrayListByPage(page,orderItems(shopItems));
     }
@@ -152,13 +180,13 @@ public class SellItemManager {
         sellItems.remove(shopItem);
     }
 
-    public void addSellItem(Player player, Item item,double money){
-        PlayerSellItemEvent event = new PlayerSellItemEvent(player, item, money);
+    public void addSellItem(Player player, Item item,double money,boolean isRemove){
+        PlayerSellItemEvent event = new PlayerSellItemEvent(player, item, money,isRemove);
         Server.getInstance().getPluginManager().callEvent(event);
         if(event.isCancelled()){
             return;
         }
-        ShopItem shopItem = ShopItem.cloneTo(item,player.getName(),money);
+        ShopItem shopItem = ShopItem.cloneTo(item,player.getName(),money,isRemove);
         this.addItem(shopItem);
     }
 
@@ -232,6 +260,7 @@ public class SellItemManager {
             }
             map.put("sellPlayer",shopItem.getSellPlayer());
             map.put("sellMoney",shopItem.getSellMoney());
+            map.put("isRemove",shopItem.isRemove());
             list.add(map);
         }
         config.set("sell",list);
