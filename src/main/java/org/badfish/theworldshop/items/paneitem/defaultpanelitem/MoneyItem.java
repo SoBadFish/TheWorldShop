@@ -21,16 +21,18 @@ public class MoneyItem extends BasePanelItem {
 
     public static Item toItem(Item defaultItem) {
         Item saveItem = defaultItem.clone();
-
         ArrayList<String> lore = new ArrayList<>(Arrays.asList(saveItem.getLore()));
         double money = TheWorldShopMainClass.MONEY_ITEM.mathMoney(defaultItem);
+
         lore.add(TextFormat.colorize('&',"&r&7■■■■■■■■■■■■■■■■■■■■"));
-        lore.add(TextFormat.colorize('&',"&r&e回收价格    |   &a"+(money) ));
-        lore.add(TextFormat.colorize('&',"&r&l&d      双击出售"));
+        lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.moneyItemLore1)+"    |   &a"+(money)+" "
+                +TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(TheWorldShopMainClass.MONEY_ITEM.getMoneyTypeName(defaultItem)) ));
+        lore.add(TextFormat.colorize('&',"&r&l&d      "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.moneyItemLore2)));
         lore.add(TextFormat.colorize('&',"&r&7■■■■■■■■■■■■■■■■■■■■"));
         Item i =  toItem(saveItem,null,new ArrayList<>(), ItemType.MONEY_ITEM);
+
         i.setLore(lore.toArray(new String[0]));
-        return saveItem(saveItem, i);
+        return saveItem(defaultItem, i);
     }
 
 

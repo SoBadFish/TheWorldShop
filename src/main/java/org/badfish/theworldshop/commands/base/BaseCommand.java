@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
+import org.badfish.theworldshop.TheWorldShopMainClass;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +48,7 @@ abstract public class BaseCommand extends Command {
                     } else if (sender instanceof Player) {
                         return true;
                     } else {
-                        sender.sendMessage("请不要在控制台执行此指令");
+                        sender.sendMessage(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sendCommandinConsole));
                     }
                 } else {
                     sendHelp(sender);

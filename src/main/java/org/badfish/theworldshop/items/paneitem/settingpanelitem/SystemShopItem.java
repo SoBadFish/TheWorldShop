@@ -24,6 +24,6 @@ public class SystemShopItem extends BasePanelItem {
 
 
     public static int getIndex() {
-        return 31;
+        return 30;
     }
 }

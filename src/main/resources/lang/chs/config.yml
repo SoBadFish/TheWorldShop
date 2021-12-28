@@ -1,0 +1,35 @@
+# 语言:
+# "eng":English
+# "chs": 中文
+lang: "chs"
+
+title: "交易行"
+# 交易购买的税率
+# 小数点数代替百分数
+# 当前为 20%
+# 为0则无税收
+tax: 0.2
+
+
+#
+# 玩家最大的出售数量
+#
+player-sell-max: 10
+
+#
+# 出售金额限制(最小值)
+#
+sell-money-min: 0.1
+#
+# 出售金额限制(最大值)
+#
+sell-money-max: 100000
+
+#
+# 经济核心名称
+#
+money-name:
+  EconomyAPI: "&e金币"
+  PlayerPoints: "&d点券"
+  Money: "&2金钱"
+

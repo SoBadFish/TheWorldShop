@@ -1,6 +1,5 @@
 package org.badfish.theworldshop.items.paneitem.settingpanelitem;
 
-
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
 import org.badfish.theworldshop.items.ItemType;
@@ -11,18 +10,16 @@ import java.util.ArrayList;
 /**
  * @author BadFish
  */
-public class PlayerShopItem extends BasePanelItem {
-
-    public static Item toItem(String name, boolean isSetting) {
-        Item i = toItem(Item.get(264), name, new ArrayList<>(), ItemType.PLAYER_SELL);
-        if (isSetting) {
+public class MoneyTypeItem extends BasePanelItem {
+    public static Item toItem(String name, boolean isSetting){
+        Item i = toItem(Item.get(175),name,new ArrayList<>(), ItemType.MONEY_TYPE);
+        if(isSetting){
             i.addEnchantment(Enchantment.get(1));
         }
         return i;
     }
 
-
-    public static int getIndex() {
-        return 32;
+    public static int getIndex(){
+        return 25;
     }
 }

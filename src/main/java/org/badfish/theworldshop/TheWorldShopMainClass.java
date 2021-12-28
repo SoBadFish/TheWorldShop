@@ -6,6 +6,10 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import org.badfish.theworldshop.commands.TheWorldCommand;
 import org.badfish.theworldshop.configs.TheWorldShopConfig;
+import org.badfish.theworldshop.language.BaseLanguage;
+import org.badfish.theworldshop.language.LanguageManager;
+import org.badfish.theworldshop.language.langs.ChineseLanguage;
+import org.badfish.theworldshop.language.langs.EnglishLanguage;
 import org.badfish.theworldshop.manager.CustomItemManager;
 import org.badfish.theworldshop.manager.MoneyItemManager;
 import org.badfish.theworldshop.manager.PlayerSellItemManager;
@@ -13,6 +17,7 @@ import org.badfish.theworldshop.manager.SellItemManager;
 import org.badfish.theworldshop.panel.ChestInventoryPanel;
 import org.badfish.theworldshop.panel.lib.AbstractFakeInventory;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -22,6 +27,10 @@ import java.util.LinkedHashMap;
 public class TheWorldShopMainClass extends PluginBase {
 
     public static String TITLE;
+
+    public static String DEFAULT_LANGUAGE = "chs";
+
+    public static BaseLanguage language;
 
     public static TheWorldShopMainClass MAIN_INSTANCE;
 
@@ -41,20 +50,57 @@ public class TheWorldShopMainClass extends PluginBase {
     @Override
     public void onEnable() {
         MAIN_INSTANCE = this;
-        this.getLogger().info("正在加载市场");
+
+        initLanguage();
+        loadLanguage();
+
+        this.getLogger().info(language.getLang(language.loadInfo));
         checkServer();
+
         loadConfig();
+
         TITLE = TextFormat.colorize('&',getConfig().getString("title","交易行"));
-        this.getLogger().info("全球市场加载完成 by 某吃瓜咸鱼");
-        this.getLogger().info("本插件完全免费 如果你是购买的，那你就被坑了");
-        this.getServer().getCommandMap().register("theworldshop",new TheWorldCommand("tw","全球市场"));
+        this.getLogger().info(language.getLang(language.loadInfo1));
+        this.getLogger().info(language.getLang(language.loadInfo2));
+        this.getServer().getCommandMap().register("theworldshop",new TheWorldCommand("tw",language.getLang(language.commandDescription)));
         this.getServer().getPluginManager().registerEvents(new ListenerEvent(),this);
 
     }
 
+    public void loadLanguage(){
+        File file = new File(this.getDataFolder()+"/config.yml");
+        File file1 = new File(this.getDataFolder()+"/language.yml");
+        if(!file.exists()){
+            this.saveResource("lang/"+DEFAULT_LANGUAGE+"/config.yml","config.yml",false);
+        }else{
+
+            if(!getConfig().getString("lang","chs").equalsIgnoreCase(DEFAULT_LANGUAGE)){
+                DEFAULT_LANGUAGE = getConfig().getString("lang","chs");
+                this.saveResource("lang/"+DEFAULT_LANGUAGE+"/config.yml","config.yml",true);
+                this.saveResource("lang/"+DEFAULT_LANGUAGE+"/language.yml","language.yml",true);
+                reloadConfig();
+            }
+        }
+        if(!file1.exists()){
+            this.saveResource("lang/"+DEFAULT_LANGUAGE+"/language.yml","language.yml",false);
+        }
+
+        LanguageManager.getLanguage(DEFAULT_LANGUAGE).languageLoadByConfig(new Config(file1,Config.YAML));
+        language = LanguageManager.getLanguage(DEFAULT_LANGUAGE);
+    }
+
+    private void initLanguage(){
+        LanguageManager.register("chs",new ChineseLanguage());
+        LanguageManager.register("eng",new EnglishLanguage());
+    }
+
+    public static BaseLanguage getLanguage() {
+        return language;
+    }
+
     public void loadConfig(){
-        this.saveDefaultConfig();
-        this.reloadConfig();
+
+
         this.saveResource("items.yml",false);
         WORLD_CONFIG = TheWorldShopConfig.load(getConfig());
         SELL_MANAGER = SellItemManager.loadManager(new Config(getDataFolder()+"/items.yml",Config.YAML));
@@ -63,9 +109,15 @@ public class TheWorldShopMainClass extends PluginBase {
     }
 
     public void save(){
-        SELL_MANAGER.save();
-        CUSTOM_ITEM.save();
-        MONEY_ITEM.save();
+        if(SELL_MANAGER != null) {
+            SELL_MANAGER.save();
+        }
+        if(SELL_MANAGER != null) {
+            CUSTOM_ITEM.save();
+        }
+        if(SELL_MANAGER != null) {
+            MONEY_ITEM.save();
+        }
     }
 
     private void checkServer(){
@@ -81,9 +133,9 @@ public class TheWorldShopMainClass extends PluginBase {
         }
         AbstractFakeInventory.IS_PM1E = ver;
         if(ver){
-            this.getLogger().info("当前插件运行在: Nukkit PM1E 核心上");
+            this.getLogger().info(language.getLang(language.loadInfo3));
         }else{
-            this.getLogger().info("当前插件运行在: Nukkit 核心上");
+            this.getLogger().info(language.getLang(language.loadInfo4));
         }
     }
 

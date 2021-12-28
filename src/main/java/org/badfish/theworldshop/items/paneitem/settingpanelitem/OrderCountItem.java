@@ -22,7 +22,7 @@ public class OrderCountItem extends BasePanelItem {
 
 
     public static int getIndex(){
-        return 29;
+        return 28;
     }
 
 }

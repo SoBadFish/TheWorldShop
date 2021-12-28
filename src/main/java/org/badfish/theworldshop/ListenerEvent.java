@@ -6,6 +6,7 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.inventory.InventoryTransactionEvent;
 import cn.nukkit.event.player.PlayerFormRespondedEvent;
+import cn.nukkit.form.element.ElementDropdown;
 import cn.nukkit.form.element.ElementInput;
 import cn.nukkit.form.element.ElementToggle;
 import cn.nukkit.form.response.FormResponseCustom;
@@ -16,12 +17,12 @@ import cn.nukkit.inventory.transaction.action.InventoryAction;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
-import me.onebone.economyapi.EconomyAPI;
 import org.badfish.theworldshop.events.ChoseByItemEvent;
 import org.badfish.theworldshop.events.PlayerBuyItemEvent;
 import org.badfish.theworldshop.events.PlayerSellItemEvent;
 import org.badfish.theworldshop.events.SellItemEvent;
 import org.badfish.theworldshop.items.ItemType;
+import org.badfish.theworldshop.items.MoneySellItem;
 import org.badfish.theworldshop.items.ShopItem;
 import org.badfish.theworldshop.items.paneitem.defaultpanelitem.LastInventoryItem;
 import org.badfish.theworldshop.items.paneitem.defaultpanelitem.MoneyItem;
@@ -29,6 +30,7 @@ import org.badfish.theworldshop.manager.PlayerInfoManager;
 import org.badfish.theworldshop.manager.PlayerSellItemManager;
 import org.badfish.theworldshop.panel.ChestInventoryPanel;
 import org.badfish.theworldshop.panel.DisplayPanel;
+import org.badfish.theworldshop.utils.LoadMoney;
 import org.badfish.theworldshop.utils.Tool;
 
 import java.util.ArrayList;
@@ -50,6 +52,8 @@ public class ListenerEvent implements Listener {
 
     public static ArrayList<Player> LOOK_ITEMS = new ArrayList<>();
 
+    public static ArrayList<Player> LOOK_MONEY_TYPE = new ArrayList<>();
+
     public static ArrayList<Player> LOOK_PLAYERS = new ArrayList<>();
 
     private static LinkedHashMap<Player,Item> SELL_ITEM = new LinkedHashMap<>();
@@ -61,9 +65,9 @@ public class ListenerEvent implements Listener {
         if(TheWorldShopMainClass.SELL_MANAGER.getPlayerSellCount(player.getName()) <
                 TheWorldShopMainClass.WORLD_CONFIG.getPlayerSellMax()) {
             player.getInventory().removeItem(item);
-            player.sendMessage(TextFormat.colorize('&',"&a出售物品成功 价格&e"+event.getMoney()));
+            player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellSuccess,event.getMoney())));
         }else{
-            player.sendMessage(TextFormat.colorize('&',"&c你无法上架更多的物品"));
+            player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+"&c"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellMaxError)));
             event.setCancelled();
         }
     }
@@ -80,32 +84,35 @@ public class ListenerEvent implements Listener {
                 SELL_ITEM.remove(player);
                 String number = ((FormResponseCustom)event.getResponse()).getInputResponse(0);
                 boolean isRemove = false;
+                MoneySellItem.MoneyType type = MoneySellItem.MoneyType.valueOf(((FormResponseCustom)event.getResponse()).getDropdownResponse(1).getElementContent());
+
                 if(player.isOp()){
-                    isRemove = ((FormResponseCustom)event.getResponse()).getToggleResponse(1);
+                    isRemove = ((FormResponseCustom)event.getResponse()).getToggleResponse(2);
                 }
+
                 double d;
                 try {
                     d = Double.parseDouble(number);
                     if(d > 0){
                         if(d < TheWorldShopMainClass.WORLD_CONFIG.getMoneyMin() ||
                                 d > TheWorldShopMainClass.WORLD_CONFIG.getMoneyMax()){
-                            player.sendMessage(TextFormat.colorize('&',
-                                    "&c请不要超过 "+TheWorldShopMainClass.WORLD_CONFIG.getMoneyMax()+
-                                    " 或 小于 "+TheWorldShopMainClass.WORLD_CONFIG.getMoneyMin()));
+                            player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&c "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellMoneyNotInArray,TheWorldShopMainClass.WORLD_CONFIG.getMoneyMax(),TheWorldShopMainClass.WORLD_CONFIG.getMoneyMin())));
                             return;
                         }
+
+
                         if(i.getCount() <= Tool.getItemCount(i,player.getInventory())){
-                            TheWorldShopMainClass.SELL_MANAGER.addSellItem(player, i,d,isRemove);
+                            TheWorldShopMainClass.SELL_MANAGER.addSellItem(player, i,type,d,isRemove);
 
                         }else{
-                            player.sendMessage(TextFormat.colorize('&',"&c您背包内物品不足"));
+                            player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+"&c"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemError)));
                         }
                     }else{
-                        player.sendMessage(TextFormat.colorize('&',"&c请重新选择物品并输入正确的价格"));
+                        player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+"&c"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellMoneyInputError)));
                     }
                 }catch (Exception e){
                     e.printStackTrace();
-                    player.sendMessage(TextFormat.colorize('&',"&c请重新选择物品并输入正确的价格"));
+                    player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+"&c"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellMoneyInputError)));
                 }
 
             }
@@ -130,6 +137,21 @@ public class ListenerEvent implements Listener {
                         }
                     }
                     inventory.setContents(DisplayPanel.getPlayerPanel(playerInfoManager));
+                    break;
+                case MONEY_SUB_ITEM:
+                    player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB,1,1,player);
+                    if(playerInfoManager.getMoneyType() == null){
+                        playerInfoManager.setMoneyType(MoneySellItem.MoneyType.valueOf(item.getCustomName()));
+                        playerInfoManager.addSettings(type);
+                    }else{
+                        if(playerInfoManager.getMoneyType() == MoneySellItem.MoneyType.valueOf(item.getCustomName())){
+                            playerInfoManager.setMoneyType(null);
+                            playerInfoManager.addSettings(type);
+                        }else{
+                            playerInfoManager.setMoneyType(MoneySellItem.MoneyType.valueOf(item.getCustomName()));
+                        }
+                    }
+                    inventory.setContents(DisplayPanel.getMoneyPanel(playerInfoManager));
                     break;
                 case SEEK_ITEM:
                     player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB,1,1,player);
@@ -191,6 +213,10 @@ public class ListenerEvent implements Listener {
                         inventory.setContents(DisplayPanel.getItemPanel(playerInfoManager));
                         break;
                     }
+                    if(LOOK_MONEY_TYPE.contains(player)){
+                        inventory.setContents(DisplayPanel.getMoneyPanel(playerInfoManager));
+                        break;
+                    }
                     if(LOOK_MYSELF.contains(player)){
                         inventory.setContents(DisplayPanel.getPlayerItems(playerInfoManager));
                         break;
@@ -213,6 +239,10 @@ public class ListenerEvent implements Listener {
                         inventory.setContents(DisplayPanel.getItemPanel(playerInfoManager));
                         break;
                     }
+                    if(LOOK_MONEY_TYPE.contains(player)){
+                        inventory.setContents(DisplayPanel.getMoneyPanel(playerInfoManager));
+                        break;
+                    }
                     if(LOOK_MYSELF.contains(player)){
                         inventory.setContents(DisplayPanel.getPlayerItems(playerInfoManager));
                         break;
@@ -225,6 +255,7 @@ public class ListenerEvent implements Listener {
                     LOOK_MYSELF.remove(player);
                     LOOK_PLAYERS.remove(player);
                     LOOK_ITEMS.remove(player);
+                    LOOK_MONEY_TYPE.remove(player);
                 case REFRESH:
                     if(LOOK_MYSELF.contains(player)){
                         inventory.setContents(DisplayPanel.getPlayerItems(playerInfoManager));
@@ -238,6 +269,7 @@ public class ListenerEvent implements Listener {
                     break;
                 case SEEK_PLAYER:
                 case SEEK_ITEM:
+                case MONEY_SUB_ITEM:
                 case ORDER:
                 case SETTING:
                 case ORDER_COUNT:
@@ -253,12 +285,23 @@ public class ListenerEvent implements Listener {
                     player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB,1,1,player);
                     inventory.close(player);
                     SELL_ITEM.put(player,item.clone());
-                    FormWindowCustom custom = new FormWindowCustom("请输入购买价格");
-                    custom.addElement(new ElementInput("请输入你要出售的金钱数"));
+                    FormWindowCustom custom = new FormWindowCustom(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsTitle));
+                    custom.addElement(new ElementInput(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsInputInfo)));
+                    ArrayList<String> moneyType = new ArrayList<>();
+                    for(MoneySellItem.MoneyType moneyType1: MoneySellItem.MoneyType.values()){
+                        if(LoadMoney.isEnable(moneyType1)){
+                            moneyType.add(moneyType1.name());
+                        }
+                    }
+                    custom.addElement(new ElementDropdown(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsDropDownInfo),moneyType));
                     if(player.isOp()){
-                        custom.addElement(new ElementToggle("是否为系统商店(不消耗数量)"));
+                        custom.addElement(new ElementToggle(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsToggleInfo)));
                     }
                     player.showFormWindow(custom,MONEY_UI_NUMBER);
+                    break;
+                case MONEY_TYPE:
+                    LOOK_MONEY_TYPE.add(player);
+                    inventory.setContents(DisplayPanel.getMoneyPanel(playerInfoManager));
                     break;
                 case ITEM:
                     LOOK_ITEMS.add(player);
@@ -274,6 +317,7 @@ public class ListenerEvent implements Listener {
                     reset();
                     break;
                 case MONEY_ITEM:
+                    //item为处理过的
                     SellItemEvent event = new SellItemEvent(player,item);
                     Server.getInstance().getPluginManager().callEvent(event);
                     if(event.isCancelled()){
@@ -290,16 +334,18 @@ public class ListenerEvent implements Listener {
     public void onItemSell(SellItemEvent event){
         Player player = event.getPlayer();
         Item sellItem = event.getItem();
+
         if(!SELL_LOCK.containsKey(player)){
             SELL_LOCK.put(player, sellItem);
             event.setCancelled();
             player.getLevel().addSound(player.getPosition(),Sound
                     .MOB_VILLAGER_NO,1,1,player);
-            player.sendActionBar("再点一次出售物品");
+            player.sendActionBar(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemClickAgain));
             return;
         }
         Item i = SELL_LOCK.get(player);
-        if(i.equals(sellItem)){
+
+        if(i.equals(sellItem,true,true)){
             SELL_LOCK.remove(player);
             PlayerSellItemManager manager = TheWorldShopMainClass.PLAYER_SELL.
                     get(TheWorldShopMainClass.PLAYER_SELL.
@@ -308,8 +354,11 @@ public class ListenerEvent implements Listener {
             if(Tool.getItemCount(last,player.getInventory()) >= last.getCount()){
                 player.getInventory().removeItem(last);
                 double m = TheWorldShopMainClass.MONEY_ITEM.mathMoney(last);
-                EconomyAPI.getInstance().addMoney(player,m);
-                player.sendMessage("出售成功 获得 "+m);
+                MoneySellItem.MoneyType type = TheWorldShopMainClass.MONEY_ITEM.getMoneyTypeName(last);
+                new LoadMoney(type).addMoney(player,m);
+                player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB,1,1,player);
+                player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&c "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemSuccess,m,TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(type))));
+
             }
             manager.getSellItems().remove(last);
         }else{
@@ -329,6 +378,11 @@ public class ListenerEvent implements Listener {
             inventory.setContents(DisplayPanel.getItemPanel(playerInfoManager));
             return;
         }
+        if(LOOK_MONEY_TYPE.contains(player)){
+            inventory.setContents(DisplayPanel.getMoneyPanel(playerInfoManager));
+            return;
+        }
+
         if(LOOK_MYSELF.contains(player)){
             inventory.setContents(DisplayPanel.getPlayerItems(playerInfoManager));
             return;
@@ -361,13 +415,14 @@ public class ListenerEvent implements Listener {
     public void onBuy(ChoseByItemEvent event){
         ShopItem shopItem = event.getItem();
         Player player = event.getPlayer();
+        LoadMoney loadMoney = new LoadMoney(shopItem.getMoneyType());
         if(player.getName().equalsIgnoreCase(shopItem.getSellPlayer())){
             if(!BUY_LOCK.containsKey(player)) {
                 BUY_LOCK.put(player,shopItem);
                 event.setCancelled();
                 player.getLevel().addSound(player.getPosition(),Sound
                 .MOB_VILLAGER_NO,1,1,player);
-                player.sendActionBar("再点一次撤销物品");
+                player.sendActionBar(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemClickRemoveAgain));
                 return;
             }
         }
@@ -376,7 +431,7 @@ public class ListenerEvent implements Listener {
             event.setCancelled();
             player.getLevel().addSound(player.getPosition(),Sound
                     .MOB_VILLAGER_NO,1,1,player);
-            player.sendActionBar("再点击一次购买");
+            player.sendActionBar(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemClickBuyAgain));
             return;
         }
 
@@ -400,44 +455,44 @@ public class ListenerEvent implements Listener {
                 if(player.getInventory().canAddItem(event1.getItem())) {
                     TheWorldShopMainClass.SELL_MANAGER.removeItem(shopItem);
                 }else{
-                    player.sendActionBar("您的背包没有空间");
+                    player.sendActionBar("&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&c "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.playerInventoryError));
                     player.getLevel().addSound(player.getPosition(),Sound
                             .MOB_VILLAGER_NO,1,1,player);
                     event.setCancelled();
                     return;
                 }
-                player.getLevel().addSound(player.getPosition(),Sound
-                        .MOB_VILLAGER_YES,1,1,player);
+                player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB,1,1,player);
                 player.getInventory().addItem(event1.getItem());
                 return;
             }
 
 
-            if(EconomyAPI.getInstance().myMoney(player) >= sellMoney){
+            if(loadMoney.myMoney(player) >= sellMoney){
                 if(player.getInventory().canAddItem(shopItem.getDefaultItem())){
                     player.getInventory().addItem(shopItem.getDefaultItem());
                     if(!shopItem.isRemove()) {
                         TheWorldShopMainClass.SELL_MANAGER.removeItem(shopItem);
                     }
-                    player.getLevel().addSound(player.getPosition(),Sound
-                            .MOB_VILLAGER_YES,1,1,player);
-                    player.sendMessage(TextFormat.colorize('&',"&a购买成功! &e花费: &f"+sellMoney));
+                    player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB,1,1,player);
+                    player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&c "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.buyItemSuccess,sellMoney,TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(shopItem.getMoneyType()))));
+
                 }else{
                     player.getLevel().addSound(player.getPosition(),Sound
                             .MOB_VILLAGER_NO,1,1,player);
-                    player.sendActionBar(TextFormat.colorize('&',"&c您的背包没有空间"));
+                    player.sendActionBar(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+"&c"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.playerInventoryError)));
                     event.setCancelled();
                     return;
                 }
                 String target = shopItem.getSellPlayer();
                 if(!shopItem.isRemove()) {
-                    EconomyAPI.getInstance().addMoney(target, shopItem.getSellMoney());
+                    loadMoney.addMoney(target,shopItem.getSellMoney());
                 }
-                EconomyAPI.getInstance().reduceMoney(player,sellMoney);
+                loadMoney.reduceMoney(player,sellMoney);
+
             }else{
                 player.getLevel().addSound(player.getPosition(),Sound
                         .MOB_VILLAGER_NO,1,1,player);
-                player.sendActionBar("您的金钱不足");
+                player.sendActionBar(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.playerMoneyError,TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(shopItem.getMoneyType()))));
                 event.setCancelled();
             }
         }else{

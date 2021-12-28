@@ -26,6 +26,11 @@ public enum  ItemType {
     SYSTEM_SELL("systemSell"),
     /**玩家出售*/
     PLAYER_SELL("playerSell"),
+    /**筛选条件 金钱类型*/
+
+    MONEY_TYPE("moneyType"),
+    /**筛选条件 金钱类型 - sub*/
+    MONEY_SUB_ITEM("moneySubItem"),
     /**玩家*/
     PLAYER("player"),
     /**玩家*/

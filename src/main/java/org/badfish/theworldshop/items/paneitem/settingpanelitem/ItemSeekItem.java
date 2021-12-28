@@ -21,6 +21,6 @@ public class ItemSeekItem extends BasePanelItem {
     }
 
     public static int getIndex(){
-        return 24;
+        return 23;
     }
 }

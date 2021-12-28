@@ -6,6 +6,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.utils.Config;
 import org.badfish.theworldshop.TheWorldShopMainClass;
 import org.badfish.theworldshop.events.PlayerSellItemEvent;
+import org.badfish.theworldshop.items.MoneySellItem;
 import org.badfish.theworldshop.items.ShopItem;
 import org.badfish.theworldshop.utils.Tool;
 
@@ -54,6 +55,19 @@ public class SellItemManager {
 
     public ArrayList<ShopItem> getPlayerAllShopItem(String playerName){
         return getPlayerAllShopItem(playerName,sellItems);
+    }
+    /**
+     * 筛选货币类型
+     * @param sellItems 物品列表
+     * */
+    public ArrayList<ShopItem> getMoneyTypeItem(ArrayList<ShopItem> sellItems, MoneySellItem.MoneyType moneyType){
+        ArrayList<ShopItem> shopItems = new ArrayList<>();
+        for(ShopItem shopItem:sellItems){
+            if(shopItem.getMoneyType() == moneyType){
+                shopItems.add(shopItem);
+            }
+        }
+        return shopItems;
     }
     /**
      * 筛选系统商店
@@ -180,13 +194,13 @@ public class SellItemManager {
         sellItems.remove(shopItem);
     }
 
-    public void addSellItem(Player player, Item item,double money,boolean isRemove){
+    public void addSellItem(Player player, Item item, MoneySellItem.MoneyType moneyType, double money, boolean isRemove){
         PlayerSellItemEvent event = new PlayerSellItemEvent(player, item, money,isRemove);
         Server.getInstance().getPluginManager().callEvent(event);
         if(event.isCancelled()){
             return;
         }
-        ShopItem shopItem = ShopItem.cloneTo(item,player.getName(),money,isRemove);
+        ShopItem shopItem = ShopItem.cloneTo(item,player.getName(),moneyType,money,isRemove);
         this.addItem(shopItem);
     }
 
@@ -258,6 +272,7 @@ public class SellItemManager {
             }else{
                 map.put("tag","not");
             }
+            map.put("moneyType",shopItem.getMoneyType().toString());
             map.put("sellPlayer",shopItem.getSellPlayer());
             map.put("sellMoney",shopItem.getSellMoney());
             map.put("isRemove",shopItem.isRemove());

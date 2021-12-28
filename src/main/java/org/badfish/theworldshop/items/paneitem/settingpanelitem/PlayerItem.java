@@ -21,6 +21,6 @@ public class PlayerItem extends BasePanelItem {
     }
 
     public static int getIndex(){
-        return 20;
+        return 19;
     }
 }

@@ -13,6 +13,12 @@ public class ReloadSubCommand extends BaseSubCommand {
         super(name);
     }
 
+
+    @Override
+    public boolean canUse(CommandSender sender){
+        return sender.isOp();
+    }
+
     @Override
     public String[] getAliases() {
         return new String[0];
@@ -20,10 +26,11 @@ public class ReloadSubCommand extends BaseSubCommand {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        if(sender.isOp()){
-            TheWorldShopMainClass.MAIN_INSTANCE.loadConfig();
-            sender.sendMessage("配置文件已重载");
-        }
+
+        TheWorldShopMainClass.MAIN_INSTANCE.loadLanguage();
+        TheWorldShopMainClass.MAIN_INSTANCE.loadConfig();
+        sender.sendMessage(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.reloadCommandMessage));
+
         return true;
     }
 

@@ -24,13 +24,16 @@ public class ShopItem  {
 
     private Item defaultItem;
 
+    private MoneySellItem.MoneyType moneyType;
+
 
     private boolean isRemove = false;
 
 
-    private ShopItem(Item defaultItem,String sellPlayer,double sellMoney) {
+    private ShopItem(Item defaultItem, String sellPlayer, MoneySellItem.MoneyType moneyType, double sellMoney) {
         this.defaultItem = defaultItem.clone();
         this.shopItem = defaultItem.clone();
+        this.moneyType = moneyType;
         this.sellPlayer = sellPlayer;
         this.sellMoney = sellMoney;
     }
@@ -48,6 +51,11 @@ public class ShopItem  {
     public boolean isRemove() {
         return isRemove;
     }
+
+    public MoneySellItem.MoneyType getMoneyType() {
+        return moneyType;
+    }
+
 
     public void setRemove(boolean remove) {
         isRemove = remove;
@@ -75,8 +83,11 @@ public class ShopItem  {
                 remove = (Boolean) map.get("isRemove");
             }
             double sellMoney = Double.parseDouble(map.get("sellMoney").toString());
-
-            return cloneTo(i, sellPlayer, sellMoney,remove);
+            MoneySellItem.MoneyType type = MoneySellItem.MoneyType.EconomyAPI;
+            if(map.containsKey("moneyType")){
+                type = MoneySellItem.MoneyType.valueOf(map.get("moneyType").toString());
+            }
+            return cloneTo(i, sellPlayer,type, sellMoney,remove);
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -96,7 +107,7 @@ public class ShopItem  {
                     }
                 }
 
-                ShopItem item1 = new ShopItem(def,tag.getString(TAG+"player"),tag.getDouble(TAG+"money"));
+                ShopItem item1 = new ShopItem(def,tag.getString(TAG+"player"), MoneySellItem.MoneyType.valueOf(tag.getString(TAG+"moneyType")),tag.getDouble(TAG+"money"));
                 item1.setRemove(tag.getBoolean(TAG+"isRemove"));
                 return item1;
             }
@@ -108,8 +119,8 @@ public class ShopItem  {
         return shopItem;
     }
 
-    public static ShopItem cloneTo(Item defaultItem,String sellPlayer,double sellMoney,boolean isRemove){
-        ShopItem item = new ShopItem(defaultItem,null,0);
+    public static ShopItem cloneTo(Item defaultItem, String sellPlayer, MoneySellItem.MoneyType moneyType, double sellMoney, boolean isRemove){
+        ShopItem item = new ShopItem(defaultItem,null,moneyType,0);
         item.setSellMoney(sellMoney);
         item.setSellPlayer(sellPlayer);
         item.setRemove(isRemove);
@@ -127,23 +138,23 @@ public class ShopItem  {
         String m1 = String.format("%.2f",m);
         lore.add(TextFormat.colorize('&',"&r&7■■■■■■■■■■■■■■■■■■■■"));
 
-        lore.add(TextFormat.colorize('&',"&r&e出售者     |   &a"+sellPlayer));
+        lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore1)+"     |   &a"+sellPlayer));
         if(isRemove){
-            lore.add(TextFormat.colorize('&',"&r&d官方出售"));
-            lore.add(TextFormat.colorize('&',"&r&e价格       |   &a"+(sellMoney) ));
+            lore.add(TextFormat.colorize('&',"&r&d"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore2)));
+            lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3)+"       |   &a"+(sellMoney)+" "+TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(moneyType) ));
         }else{
             if(TheWorldShopMainClass.WORLD_CONFIG.getTax() > 0){
-                lore.add(TextFormat.colorize('&',"&r&e价格       |   &a"+(sellMoney + m) + " &r(&e↑"+m1+"&r)"));
-                lore.add(TextFormat.colorize('&',"&r&e当前税收   |   &a"+ (TheWorldShopMainClass.
+                lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3)+"       |   &a"+(sellMoney + m) + " &r(&e↑"+m1+"&r)"));
+                lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore4)+"   |   &a"+ (TheWorldShopMainClass.
                         WORLD_CONFIG.getTax() * 100) + "％"));
             }else{
-                lore.add(TextFormat.colorize('&',"&r&e价格       |   &a"+(sellMoney )));
+                lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3)+"       |   &a"+(sellMoney )+" "+TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(moneyType)));
             }
 
         }
 
         lore.add(TextFormat.colorize('&',""));
-        lore.add(TextFormat.colorize('&',"&r&l&a      双击购买"));
+        lore.add(TextFormat.colorize('&',"&r&l&a      "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore5)));
         lore.add(TextFormat.colorize('&',"&r&7■■■■■■■■■■■■■■■■■■■■"));
 
         item.shopItem.setLore(lore.toArray(new String[0]));
@@ -153,6 +164,7 @@ public class ShopItem  {
         tag.putString(TAG+"type","sell");
         tag.putString(TAG+"player",sellPlayer);
         tag.putDouble(TAG+"money",sellMoney);
+        tag.putString(TAG+"moneyType",moneyType.name());
         tag.putBoolean(TAG+"isRemove",isRemove);
         if(defaultItem.hasCompoundTag()) {
             String b = Tool.bytesToHexString(defaultItem.getCompoundTag());

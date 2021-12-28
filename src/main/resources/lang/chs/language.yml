@@ -1,0 +1,110 @@
+commandDescription: "全球市场"
+addCommandPanelTitle: "上架物品"
+sellCommandPanelTitle: "物品回收"
+sendCommandinConsole: "请不要在控制台执行此指令"
+reloadCommandMessage: "配置文件已重载"
+saveCommandMessage: "配置文件已保存"
+setItemCommandLackMoney: "请输入大于0的金钱"
+setItemCommandHandAir: "请不要手持空气"
+setItemCommandSetName: "nbt物品必须定义名称"
+setItemCommandAddSuccess: "添加成功"
+setItemCommandMoneyError: "请输入正确的金钱"
+
+commandHelpAdd: "上架物品"
+
+commandHelpSell: "背包物品出售"
+commandHelpSet: "设置手持物品的回收金钱"
+commandReload: "重载配置文件"
+commandSave: "保存数据"
+commandMain: "显示市场"
+moneyItemLore1: "回收价格"
+moneyItemLore2: "双击出售"
+itemHasChose: "已选择√"
+shopItemLore1: "出售者"
+shopItemLore2: "官方出售"
+shopItemLore3: "价格"
+shopItemLore4: "当前税收"
+shopItemLore5: "双击购买"
+panelStringExceptSell: "预计出售"
+
+
+playerPanelTitleUp: "请选择上架物品"
+
+itemPanelChoseUp: "请选择筛选物品"
+
+itemPanelBack: "返回"
+
+itemPanelNext: "下一页"
+
+itemPanelEndPage: "尾页"
+
+itemPanelChosePlayer: "请选择玩家"
+
+itemPanelChoseMoney: "请选择货币类型"
+
+itemPanelLast: "上一页"
+
+itemPanelFirstPage: "首页"
+
+itemPanelSettingByMoney: "根据价格排序"
+
+itemPanelSettingByPlayer: "根据玩家筛选"
+
+itemPanelSettingByItemCount: "根据物品数量排序"
+
+itemPanelSettingByServerShop: "筛选系统商店"
+
+itemPanelSettingByPlayerShop: "筛选玩家商店"
+
+itemPanelSettingByItem: "根据物品筛选"
+
+itemPanelSettingByMoneyType: "根据货币类型筛选"
+
+itemPanelPlaceSetting: "请设置筛选条件"
+
+itemPanelDataInfo: "数据信息"
+
+showItemCountInfo: "当前拥有&e[1]&a件物品"
+
+showItemCountMax: "最大物品上限&e[1]&a件\n"
+
+showItemTax: "当前税收&e[1]％\n"
+
+showPublicItemCountInfo: "共计&e[1]&a件物品\n"
+
+showPublicPlayerSize: "共计&e[1]&a位店家\n"
+
+tipInfoClickTwo: "点击两次购买"
+
+tipSeeMySell: "查看我的出售"
+tipRefresh: "刷新"
+
+
+tipInfoChose: "筛选"
+
+sellSuccess: "&a出售物品成功价格&e[1]"
+
+sellMaxError: "你无法上架更多的物品"
+
+sellMoneyNotInArray: "请不要超过[1]或小于[2]"
+
+sellItemError: "您背包内物品不足"
+
+sellMoneyInputError: "请重新选择物品并输入正确的价格"
+
+sellItemWindowsTitle: "请输入购买价格"
+sellItemWindowsInputInfo: "请输入你要出售的金钱数"
+sellItemWindowsDropDownInfo: "请选择支付的货币类型"
+sellItemWindowsToggleInfo: "是否为系统商店(不消耗数量)"
+sellItemClickAgain: "再点一次出售物品"
+
+sellItemClickRemoveAgain: "再点一次撤销物品"
+
+sellItemClickBuyAgain: "再点击一次购买"
+sellItemSuccess: "&a出售成功获得&e[1][2]"
+
+buyItemSuccess: "&a购买成功!&e花费&f[1][2]}"
+
+playerInventoryError: "您的背包没有空间"
+
+playerMoneyError: "&c您的[1]不足"

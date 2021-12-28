@@ -1,0 +1,35 @@
+# languages:
+# "eng":English
+# "chs": 中文
+lang: "eng"
+
+title: "GlobalShop"
+# Trade buying rate
+# Decimal number instead of a percentage
+# new 20%
+# 0, no tax
+tax: 0.2
+
+
+#
+# Player's biggest selling quantity
+#
+player-sell-max: 10
+
+#
+# The sale amount limit (minimum)
+#
+sell-money-min: 0.1
+#
+# The sale amount limit (maximum)
+#
+sell-money-max: 100000
+
+#
+# The name of the economic core
+#
+money-name:
+  EconomyAPI: "&ecoin"
+  PlayerPoints: "&dpoint"
+  Money: "&2money"
+

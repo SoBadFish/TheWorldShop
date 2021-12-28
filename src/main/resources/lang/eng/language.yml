@@ -1,0 +1,105 @@
+commandDescription: "global market"
+addCommandPanelTitle: "to Sell Item"
+sellCommandPanelTitle: "Sell Item"
+sendCommandinConsole: "Please don't in the console to perform this command"
+reloadCommandMessage: "config has been reload"
+saveCommandMessage: "config has been saved"
+setItemCommandLackMoney: "Please enter the money is greater than zero"
+setItemCommandHandAir: "Please don't hold air"
+setItemCommandSetName: "nbt Items must be defined name"
+setItemCommandAddSuccess: "add success"
+setItemCommandMoneyError: "Please input the right money"
+commandHelpAdd: "to Sell Item"
+commandHelpSell: "Backpack items to sell"
+commandHelpSet: "Set the handheld items recycling money"
+commandReload: "reload config"
+commandSave: "save data"
+commandMain: "display market"
+moneyItemLore1: "sell money"
+moneyItemLore2: "Double click on the sale"
+itemHasChose: "chose on√"
+shopItemLore1: "sellers"
+shopItemLore2: "server sell"
+shopItemLore3: "price"
+shopItemLore4: "The current tax"
+shopItemLore5: "Double click on the purchase"
+panelStringExceptSell: "Is expected to sell"
+playerPanelTitleUp: "Please select items for sale"
+
+itemPanelChoseUp: "Please select a filter items"
+
+itemPanelBack: "back"
+
+itemPanelNext: "next"
+
+itemPanelEndPage: "End page"
+
+itemPanelChosePlayer: "Place chose Player"
+
+itemPanelChoseMoney: "Please select a currency type"
+
+itemPanelLast: "Last page"
+
+itemPanelFirstPage: "Home page"
+
+itemPanelSettingByMoney: "According to the price of ordering"
+
+itemPanelSettingByPlayer: "According to the player screening"
+
+itemPanelSettingByItemCount: "According to the item number"
+
+itemPanelSettingByServerShop: "Screening server stores"
+
+itemPanelSettingByPlayerShop: "Screening of players store"
+
+itemPanelSettingByItem: "According to item screening"
+
+itemPanelSettingByMoneyType: "Depending on the type of currency"
+
+itemPanelPlaceSetting: "Please set the filter condition"
+
+itemPanelDataInfo: "data info"
+
+showItemCountInfo: "Currently has &e[1]&a items"
+
+showItemCountMax: "The biggest item limit &e[1]\n"
+showItemTax: "tax: &e[1]％\n"
+
+showPublicItemCountInfo: "come to &e[1]&a items\n"
+
+showPublicPlayerSize: "come to &e[1]&a players\n"
+
+tipInfoClickTwo: "Click twice to buy"
+
+tipSeeMySell: "Check my sale"
+tipRefresh: "Refresh"
+
+
+tipInfoChose: "Screen"
+
+sellSuccess: "&aSell items success ! price: &e[1]"
+
+sellMaxError: "You can't be on more items"
+
+sellMoneyNotInArray: "Please don't take more than [1] and less than [2]"
+
+sellItemError: "No item in the Inventory!"
+
+sellMoneyInputError: "Please select items and input the correct price again"
+
+sellItemWindowsTitle: "Please enter the purchase price"
+sellItemWindowsInputInfo: "Please enter the amount of money that you want to sell"
+sellItemWindowsDropDownInfo: "Please select the type of currency in payment"
+sellItemWindowsToggleInfo: "Whether to store server(Don't consume quantity)"
+sellItemClickAgain: "Click again sell items"
+
+sellItemClickRemoveAgain: "Another Click to cancel items"
+
+sellItemClickBuyAgain: "Click on a buy again"
+sellItemSuccess: "&aSell success ! getting: &e[1][2]"
+
+buyItemSuccess: "&aBuy success ! &eput in&f[1][2]}"
+
+playerInventoryError: "Your backpack no space"
+
+playerMoneyError: "&cYour [1] not enough!"

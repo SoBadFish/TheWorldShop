@@ -20,7 +20,7 @@ abstract public class BaseSubCommand {
      * @param sender CommandSender
      * @return boolean
      */
-    boolean canUse(CommandSender sender){
+    protected boolean canUse(CommandSender sender){
         return sender.isPlayer();
     }
 

@@ -3,6 +3,7 @@ package org.badfish.theworldshop.commands.subcommand;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
+import org.badfish.theworldshop.TheWorldShopMainClass;
 import org.badfish.theworldshop.commands.base.BaseSubCommand;
 import org.badfish.theworldshop.panel.DisplayPanel;
 
@@ -23,7 +24,7 @@ public class SellItemSubCommand extends BaseSubCommand {
     public boolean execute(CommandSender sender, String label, String[] args) {
         if(sender instanceof Player) {
             DisplayPanel panel = new DisplayPanel();
-            panel.displayPlayer((Player) sender,DisplayPanel.inventorySellItemPanel((Player) sender),"物品回收");
+            panel.displayPlayer((Player) sender,DisplayPanel.inventorySellItemPanel((Player) sender), TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellCommandPanelTitle));
         }
         return true;
     }

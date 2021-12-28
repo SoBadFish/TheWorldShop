@@ -21,7 +21,7 @@ public class OrderItem extends BasePanelItem {
     }
 
     public static int getIndex(){
-        return 22;
+        return 21;
     }
 
 }

@@ -3,6 +3,7 @@ package org.badfish.theworldshop.commands;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 
+import org.badfish.theworldshop.TheWorldShopMainClass;
 import org.badfish.theworldshop.commands.base.BaseCommand;
 import org.badfish.theworldshop.commands.subcommand.*;
 import org.badfish.theworldshop.panel.DisplayPanel;
@@ -20,17 +21,22 @@ public class TheWorldCommand extends BaseCommand {
         this.addSubCommand(new SetItemMoneySubCommand("set"));
         this.addSubCommand(new ReloadSubCommand("reload"));
         this.addSubCommand(new SaveSubCommand("save"));
+        this.loadCommandBase();
     }
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
-        if(sender instanceof Player) {
-            if (args.length == 0) {
+        if (args.length == 0) {
+            if (sender instanceof Player) {
+
                 DisplayPanel displayPanel = new DisplayPanel();
                 displayPanel.displayPlayer((Player) sender);
                 return true;
+            }else{
+                sender.sendMessage(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sendCommandinConsole));
             }
         }
+
         return super.execute(sender, s, args);
     }
 
@@ -42,14 +48,14 @@ public class TheWorldCommand extends BaseCommand {
     @Override
     public void sendHelp(CommandSender sender) {
         sender.sendMessage("---------------------------");
-        sender.sendMessage("/tw add 上架物品");
-        sender.sendMessage("/tw sell 背包物品出售");
+        sender.sendMessage("/tw add "+ TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.commandHelpAdd));
+        sender.sendMessage("/tw sell "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.commandHelpSell));
         if(sender.isOp()){
-            sender.sendMessage("/tw set <金钱> [名称:NBT物品必须设置] 设置手持物品的回收金钱");
-            sender.sendMessage("/tw reload 重载配置文件");
-            sender.sendMessage("/tw save 保存数据");
+            sender.sendMessage("/tw set <money> <type:EconomyAPI|econ;PlayerPoints|point;Money|money> [name] "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.commandHelpSet));
+            sender.sendMessage("/tw reload "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.commandReload));
+            sender.sendMessage("/tw save "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.commandSave));
         }
-        sender.sendMessage("/tw 显示市场");
+        sender.sendMessage("/tw "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.commandMain));
         sender.sendMessage("---------------------------");
     }
 }

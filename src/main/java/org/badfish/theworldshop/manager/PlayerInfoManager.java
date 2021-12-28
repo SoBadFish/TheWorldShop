@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.item.Item;
 import org.badfish.theworldshop.items.ItemType;
+import org.badfish.theworldshop.items.MoneySellItem;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,8 @@ public class PlayerInfoManager {
     private String chosePlayer;
 
     private ArrayList<ItemType> settings = new ArrayList<>();
+
+    private MoneySellItem.MoneyType moneyType;
 
     private Item choseItem;
 
@@ -81,6 +84,14 @@ public class PlayerInfoManager {
             return;
         }
         settings.add(itemType);
+    }
+
+    public MoneySellItem.MoneyType getMoneyType() {
+        return moneyType;
+    }
+
+    public void setMoneyType(MoneySellItem.MoneyType moneyType) {
+        this.moneyType = moneyType;
     }
 
     public int getPage() {

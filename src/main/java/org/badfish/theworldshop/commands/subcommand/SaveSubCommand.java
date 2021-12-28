@@ -14,17 +14,20 @@ public class SaveSubCommand extends BaseSubCommand {
     }
 
     @Override
+    protected boolean canUse(CommandSender sender) {
+        return sender.isOp();
+    }
+
+    @Override
     public String[] getAliases() {
         return new String[0];
     }
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        if(sender.isOp()){
-            TheWorldShopMainClass.MAIN_INSTANCE.save();
-            sender.sendMessage("配置文件已保存");
+        TheWorldShopMainClass.MAIN_INSTANCE.save();
+        sender.sendMessage(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.saveCommandMessage));
 
-        }
         return true;
     }
 

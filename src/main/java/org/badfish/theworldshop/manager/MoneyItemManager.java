@@ -10,6 +10,7 @@ import org.badfish.theworldshop.items.MoneySellItem;
 
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -24,15 +25,46 @@ public class MoneyItemManager {
     }
 
     private double getMoney(Item item){
-        CustomItem customItem = TheWorldShopMainClass.CUSTOM_ITEM.formItem(item);
-        if(infoManager.contains(MoneySellItem.get(customItem))){
-            return infoManager.get(infoManager.indexOf(MoneySellItem.get(customItem))).getMoney();
+        MoneySellItem sellItem = getMoneySellItem(item);
+        if(sellItem == null){
+            return 0.0d;
         }
-        return 0.0d;
+        return sellItem.getMoney();
+//        CustomItem customItem = TheWorldShopMainClass.CUSTOM_ITEM.formItem(item);
+//        if(infoManager.contains(MoneySellItem.get(customItem))){
+//            return infoManager.get(infoManager.indexOf(MoneySellItem.get(customItem))).getMoney();
+//        }
+//        return 0.0d;
     }
 
-    public void addMoneyItem(CustomItem customItem,double money){
-        this.infoManager.add(new MoneySellItem(customItem,money));
+    public MoneySellItem.MoneyType getMoneyTypeName(Item item){
+        MoneySellItem sellItem = getMoneySellItem(item);
+        if(sellItem == null){
+            return MoneySellItem.MoneyType.EconomyAPI;
+        }
+        return sellItem.getMoneyType();
+    }
+
+
+    public MoneySellItem getMoneySellItem(Item item){
+        CustomItem customItem = TheWorldShopMainClass.CUSTOM_ITEM.formItem(item);
+        if(infoManager.contains(MoneySellItem.get(customItem))){
+            return infoManager.get(infoManager.indexOf(MoneySellItem.get(customItem)));
+        }
+        return null;
+
+    }
+
+    public void addMoneyItem(CustomItem customItem, MoneySellItem.MoneyType moneyType, double money){
+        MoneySellItem moneySellItem = new MoneySellItem(customItem,moneyType,money);
+        if(infoManager.contains(moneySellItem)){
+            moneySellItem = infoManager.get(infoManager.indexOf(moneySellItem));
+            moneySellItem.setMoneyType(moneyType);
+            moneySellItem.setMoney(money);
+        }else{
+            infoManager.add(moneySellItem);
+        }
+
     }
 
     public ArrayList<Item> getCanSellItemByInventory(Inventory inventory){
@@ -56,13 +88,20 @@ public class MoneyItemManager {
     public void save(){
         CustomItem item;
         Config config = new Config(TheWorldShopMainClass.MAIN_INSTANCE.getDataFolder()+"/sellmoney.yml",Config.YAML);
+        LinkedHashMap<String, Object> map;
+        String name;
         for(MoneySellItem itemDoubleEntry: infoManager){
+            map = new LinkedHashMap<>();
              item = itemDoubleEntry.getCustomItem();
+
              if(item.getName() != null){
-                 config.set(item.getName(),itemDoubleEntry.getMoney());
+                 name = item.getName();
              }else{
-                 config.set(item.getItem().getId()+":"+item.getItem().getDamage(),itemDoubleEntry.getMoney());
+                 name = item.getItem().getId()+":"+item.getItem().getDamage();
              }
+             map.put("type",itemDoubleEntry.getMoneyType().name());
+             map.put("money",itemDoubleEntry.getMoney());
+             config.set(name,map);
         }
         config.save();
     }
@@ -70,11 +109,22 @@ public class MoneyItemManager {
     public static MoneyItemManager initManager(Config config){
         ArrayList<MoneySellItem> infoManager = new ArrayList<>();
         CustomItem customItem;
+        Object o1;
+        MoneySellItem.MoneyType type;
+        double m;
         for(Map.Entry<String, Object> configMap:config.getAll().entrySet()){
             customItem = TheWorldShopMainClass.CUSTOM_ITEM.formItem(configMap.getKey());
-            if(customItem != null){
-                infoManager.add(new MoneySellItem(customItem, (Double) configMap.getValue()));
+            o1 = configMap.getValue();
+            if(customItem != null) {
+                if (o1 instanceof Map) {
+                   type = MoneySellItem.MoneyType.valueOf(((Map) o1).get("type").toString());
+                   m = Double.parseDouble(((Map) o1).get("money").toString());
+                    infoManager.add(new MoneySellItem(customItem, type, m));
+                } else {
+                    infoManager.add(new MoneySellItem(customItem, MoneySellItem.MoneyType.EconomyAPI, (Double) configMap.getValue()));
+                }
             }
+//
         }
         return new MoneyItemManager(infoManager);
     }
