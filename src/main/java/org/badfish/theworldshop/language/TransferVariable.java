@@ -1,5 +1,6 @@
 package org.badfish.theworldshop.language;
 
+
 import lombok.Data;
 
 /**
@@ -22,5 +23,6 @@ public class TransferVariable {
         this.var = var;
         this.value = value.toString();
     }
+
 
 }

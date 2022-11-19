@@ -8,13 +8,19 @@ import org.badfish.theworldshop.utils.Tool;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author BadFish
  */
 public class ShopItem  {
 
-    private Item shopItem;
+    private final Item shopItem;
+
+    /**
+     * 商品唯一标识
+     * */
+    public UUID uuid;
 
     private String sellPlayer;
 
@@ -22,20 +28,26 @@ public class ShopItem  {
 
     private double sellMoney;
 
-    private Item defaultItem;
+    private final Item defaultItem;
 
-    private MoneySellItem.MoneyType moneyType;
+    private final MoneySellItem.MoneyType moneyType;
 
+    /**
+     * 限购
+     * 0代表不限
+     * */
+    public int limit;
 
     private boolean isRemove = false;
 
 
-    private ShopItem(Item defaultItem, String sellPlayer, MoneySellItem.MoneyType moneyType, double sellMoney) {
+    private ShopItem(UUID uuid, Item defaultItem, String sellPlayer, MoneySellItem.MoneyType moneyType, double sellMoney) {
         this.defaultItem = defaultItem.clone();
         this.shopItem = defaultItem.clone();
         this.moneyType = moneyType;
         this.sellPlayer = sellPlayer;
         this.sellMoney = sellMoney;
+        this.uuid = uuid;
     }
 
     private static ArrayList<String> asList(String[] s){
@@ -61,7 +73,7 @@ public class ShopItem  {
         isRemove = remove;
     }
 
-    public static ShopItem formMap(Map map){
+    public static ShopItem formMap(Map<?,?> map){
         try {
             Item i = Item.fromString(map.get("id").toString());
             //过滤空气
@@ -77,6 +89,14 @@ public class ShopItem  {
                     i.setCompoundTag(Item.parseCompoundTag(tagForm));
                 }
             }
+            UUID uuid = UUID.randomUUID();
+            if(map.containsKey("uuid")){
+                uuid = UUID.fromString(map.get("uuid").toString());
+            }
+            int limit = -1;
+            if(map.containsKey("limit")) {
+                limit = Integer.parseInt(map.get("limit").toString());
+            }
             String sellPlayer = map.get("sellPlayer").toString();
             boolean remove = false;
             if(map.containsKey("isRemove")){
@@ -87,7 +107,7 @@ public class ShopItem  {
             if(map.containsKey("moneyType")){
                 type = MoneySellItem.MoneyType.valueOf(map.get("moneyType").toString());
             }
-            return cloneTo(i, sellPlayer,type, sellMoney,remove);
+            return cloneTo(uuid,i, sellPlayer,type, sellMoney,remove,limit);
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -106,9 +126,18 @@ public class ShopItem  {
                         def.setNamedTag(Item.parseCompoundTag(tagForm));
                     }
                 }
+                UUID uuid = UUID.randomUUID();
+                if(tag.contains(TAG+"uuid")){
+                    uuid = UUID.fromString(tag.getString(TAG+"uuid"));
+                }
+                int limit = -1;
+                if(tag.contains(TAG+"limit")) {
+                    limit = tag.getInt(TAG+"limit");
+                }
 
-                ShopItem item1 = new ShopItem(def,tag.getString(TAG+"player"), MoneySellItem.MoneyType.valueOf(tag.getString(TAG+"moneyType")),tag.getDouble(TAG+"money"));
+                ShopItem item1 = new ShopItem(uuid,def,tag.getString(TAG+"player"), MoneySellItem.MoneyType.valueOf(tag.getString(TAG+"moneyType")),tag.getDouble(TAG+"money"));
                 item1.setRemove(tag.getBoolean(TAG+"isRemove"));
+                item1.limit = limit;
                 return item1;
             }
         }
@@ -119,8 +148,8 @@ public class ShopItem  {
         return shopItem;
     }
 
-    public static ShopItem cloneTo(Item defaultItem, String sellPlayer, MoneySellItem.MoneyType moneyType, double sellMoney, boolean isRemove){
-        ShopItem item = new ShopItem(defaultItem,null,moneyType,0);
+    public static ShopItem cloneTo(UUID uuid,Item defaultItem, String sellPlayer, MoneySellItem.MoneyType moneyType, double sellMoney, boolean isRemove,int limit){
+        ShopItem item = new ShopItem(uuid,defaultItem,null,moneyType,0);
         item.setSellMoney(sellMoney);
         item.setSellPlayer(sellPlayer);
         item.setRemove(isRemove);
@@ -162,6 +191,8 @@ public class ShopItem  {
 
         tag.putString(TAG+"tag","ShopItem");
         tag.putString(TAG+"type","sell");
+        tag.putString(TAG+"uuid",uuid.toString());
+        tag.putInt(TAG+"limit",limit);
         tag.putString(TAG+"player",sellPlayer);
         tag.putDouble(TAG+"money",sellMoney);
         tag.putString(TAG+"moneyType",moneyType.name());

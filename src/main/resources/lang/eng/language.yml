@@ -91,6 +91,7 @@ sellItemWindowsTitle: "Please enter the purchase price"
 sellItemWindowsInputInfo: "Please enter the amount of money that you want to sell"
 sellItemWindowsDropDownInfo: "Please select the type of currency in payment"
 sellItemWindowsToggleInfo: "Whether to store server(Don't consume quantity)"
+sellItemWindowsLimit: "Commodity purchase quantity (- 1 for no limit)";
 sellItemClickAgain: "Click again sell items"
 
 sellItemClickRemoveAgain: "Another Click to cancel items"

@@ -100,7 +100,6 @@ public class TheWorldShopMainClass extends PluginBase {
 
     public void loadConfig(){
 
-
         this.saveResource("items.yml",false);
         WORLD_CONFIG = TheWorldShopConfig.load(getConfig());
         SELL_MANAGER = SellItemManager.loadManager(new Config(getDataFolder()+"/items.yml",Config.YAML));

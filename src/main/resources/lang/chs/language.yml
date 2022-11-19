@@ -96,6 +96,7 @@ sellItemWindowsTitle: "请输入购买价格"
 sellItemWindowsInputInfo: "请输入你要出售的金钱数"
 sellItemWindowsDropDownInfo: "请选择支付的货币类型"
 sellItemWindowsToggleInfo: "是否为系统商店(不消耗数量)"
+sellItemWindowsLimit: "商品限购数量(-1为不限制)";
 sellItemClickAgain: "再点一次出售物品"
 
 sellItemClickRemoveAgain: "再点一次撤销物品"

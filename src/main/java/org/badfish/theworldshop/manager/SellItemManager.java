@@ -194,13 +194,13 @@ public class SellItemManager {
         sellItems.remove(shopItem);
     }
 
-    public void addSellItem(Player player, Item item, MoneySellItem.MoneyType moneyType, double money, boolean isRemove){
+    public void addSellItem(Player player, Item item, MoneySellItem.MoneyType moneyType, double money, boolean isRemove,int limit){
         PlayerSellItemEvent event = new PlayerSellItemEvent(player, item, money,isRemove);
         Server.getInstance().getPluginManager().callEvent(event);
         if(event.isCancelled()){
             return;
         }
-        ShopItem shopItem = ShopItem.cloneTo(item,player.getName(),moneyType,money,isRemove);
+        ShopItem shopItem = ShopItem.cloneTo(UUID.randomUUID(),item,player.getName(),moneyType,money,isRemove,limit);
         this.addItem(shopItem);
     }
 
@@ -261,7 +261,7 @@ public class SellItemManager {
 
     public void save(){
         Config config = new Config(TheWorldShopMainClass.MAIN_INSTANCE.getDataFolder()+"/items.yml",Config.YAML);
-        List<Map> list = new ArrayList<>();
+        List<Map<?,?>> list = new ArrayList<>();
         LinkedHashMap<String, Object> map;
         for(ShopItem shopItem: sellItems){
             map = new LinkedHashMap<>();
@@ -272,6 +272,7 @@ public class SellItemManager {
             }else{
                 map.put("tag","not");
             }
+            map.put("uuid",shopItem.uuid.toString());
             map.put("moneyType",shopItem.getMoneyType().toString());
             map.put("sellPlayer",shopItem.getSellPlayer());
             map.put("sellMoney",shopItem.getSellMoney());

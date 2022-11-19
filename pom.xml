@@ -6,19 +6,41 @@
 
     <groupId>org.badfish.theworldshop</groupId>
     <artifactId>TheWorldShop</artifactId>
-    <version>1.1.2</version>
+    <version>1.2.3</version>
     <dependencies>
         <dependency>
             <groupId>cn.nukkit</groupId>
-            <artifactId>nukkit</artifactId>
+            <artifactId>Nukkit</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath> ${project.basedir}/lib/Nukkit-PM1E.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>me.onebone</groupId>
             <artifactId>economyapi</artifactId>
             <version>2.0.0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/EconomyAPI_2.0.2.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>Money</groupId>
+            <artifactId>money</artifactId>
+            <version>3.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/Money-3.3.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>points</groupId>
+            <artifactId>points</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/PlayerPoints_v1.2.0.jar</systemPath>
         </dependency>
     </dependencies>
 

@@ -11,6 +11,7 @@ public class PlayerSellItemManager {
 
     private String playerName;
 
+
     private ArrayList<Item> sellItems;
 
     public PlayerSellItemManager(String playerName,ArrayList<Item> items){

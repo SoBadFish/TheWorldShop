@@ -82,12 +82,16 @@ public class ListenerEvent implements Listener {
             if(SELL_ITEM.containsKey(player)){
                 Item i = LastInventoryItem.formItem(SELL_ITEM.get(player));
                 SELL_ITEM.remove(player);
+                int limit = -1;
                 String number = ((FormResponseCustom)event.getResponse()).getInputResponse(0);
                 boolean isRemove = false;
                 MoneySellItem.MoneyType type = MoneySellItem.MoneyType.valueOf(((FormResponseCustom)event.getResponse()).getDropdownResponse(1).getElementContent());
 
                 if(player.isOp()){
                     isRemove = ((FormResponseCustom)event.getResponse()).getToggleResponse(2);
+                    try {
+                        limit = Integer.parseInt(((FormResponseCustom) event.getResponse()).getInputResponse(3));
+                    }catch (Exception ignore){}
                 }
 
                 double d;
@@ -102,7 +106,7 @@ public class ListenerEvent implements Listener {
 
 
                         if(i.getCount() <= Tool.getItemCount(i,player.getInventory())){
-                            TheWorldShopMainClass.SELL_MANAGER.addSellItem(player, i,type,d,isRemove);
+                            TheWorldShopMainClass.SELL_MANAGER.addSellItem(player, i,type,d,isRemove,limit);
 
                         }else{
                             player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+"&c"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemError)));
@@ -296,6 +300,8 @@ public class ListenerEvent implements Listener {
                     custom.addElement(new ElementDropdown(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsDropDownInfo),moneyType));
                     if(player.isOp()){
                         custom.addElement(new ElementToggle(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsToggleInfo)));
+                        custom.addElement(new ElementInput(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsLimit)));
+
                     }
                     player.showFormWindow(custom,MONEY_UI_NUMBER);
                     break;

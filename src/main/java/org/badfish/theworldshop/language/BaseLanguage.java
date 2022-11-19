@@ -139,6 +139,8 @@ public abstract class BaseLanguage {
 
     public String sellItemWindowsToggleInfo = "是否为系统商店(不消耗数量)";
 
+    public String sellItemWindowsLimit = "商品限购数量(-1为不限制)";
+
     //sell info
 
     public String sellItemClickAgain = "再点一次出售物品";
