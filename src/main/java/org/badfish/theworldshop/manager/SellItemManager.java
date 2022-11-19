@@ -250,7 +250,7 @@ public class SellItemManager {
         return shopItems;
     }
 
-    public static int mathShopItemPage(ArrayList sellItems){
+    public static int mathShopItemPage(ArrayList<?> sellItems){
         if(sellItems.size() == 0){
             return 1;
         }
@@ -290,6 +290,7 @@ public class SellItemManager {
                 map.put("tag","not");
             }
             map.put("uuid",shopItem.uuid.toString());
+            map.put("limit",shopItem.limit);
             map.put("moneyType",shopItem.getMoneyType().toString());
             map.put("sellPlayer",shopItem.getSellPlayer());
             map.put("sellMoney",shopItem.getSellMoney());
