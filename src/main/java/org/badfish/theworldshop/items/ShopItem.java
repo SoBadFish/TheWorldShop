@@ -7,6 +7,7 @@ import org.badfish.theworldshop.TheWorldShopMainClass;
 import org.badfish.theworldshop.utils.Tool;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
@@ -144,13 +145,19 @@ public class ShopItem  {
         return null;
     }
 
-    public Item toItem(){
+    public Item toItem(String displayPlayerName){
+        ArrayList<String> lore = new ArrayList<>(Arrays.asList(shopItem.getLore()));
+        for(int i = 0;i < lore.size();i++){
+            lore.set(i,lore.get(i).replace("${playerLimitCount}",TheWorldShopMainClass.PLAYER_DATA.getBuyCount(displayPlayerName,this)+""));
+        }
+        shopItem.setLore(lore.toArray(new String[0]));
         return shopItem;
     }
 
     public static ShopItem cloneTo(UUID uuid,Item defaultItem, String sellPlayer, MoneySellItem.MoneyType moneyType, double sellMoney, boolean isRemove,int limit){
         ShopItem item = new ShopItem(uuid,defaultItem,null,moneyType,0);
         item.setSellMoney(sellMoney);
+        item.limit = limit;
         item.setSellPlayer(sellPlayer);
         item.setRemove(isRemove);
         String[] loreItem =  item.shopItem.getLore();
@@ -167,23 +174,26 @@ public class ShopItem  {
         String m1 = String.format("%.2f",m);
         lore.add(TextFormat.colorize('&',"&r&7■■■■■■■■■■■■■■■■■■■■"));
 
-        lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore1)+"     |   &a"+sellPlayer));
+        lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore1,sellPlayer)));
         if(isRemove){
             lore.add(TextFormat.colorize('&',"&r&d"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore2)));
-            lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3)+"       |   &a"+(sellMoney)+" "+TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(moneyType) ));
+            lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3NoTax,sellMoney,TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(moneyType))));
         }else{
             if(TheWorldShopMainClass.WORLD_CONFIG.getTax() > 0){
-                lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3)+"       |   &a"+(sellMoney + m) + " &r(&e↑"+m1+"&r)"));
-                lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore4)+"   |   &a"+ (TheWorldShopMainClass.
-                        WORLD_CONFIG.getTax() * 100) + "％"));
+                lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3,(sellMoney + m),m1)));
+                lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore4,(TheWorldShopMainClass.
+                        WORLD_CONFIG.getTax() * 100) + "％")));
             }else{
-                lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3)+"       |   &a"+(sellMoney )+" "+TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(moneyType)));
+                lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3NoTax,sellMoney,TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(moneyType))));
             }
 
         }
+        if(item.limit > 0){
+            lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore5,"${playerLimitCount}",limit)));
+        }
 
         lore.add(TextFormat.colorize('&',""));
-        lore.add(TextFormat.colorize('&',"&r&l&a      "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore5)));
+        lore.add(TextFormat.colorize('&',"&r&l&a      "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore6)));
         lore.add(TextFormat.colorize('&',"&r&7■■■■■■■■■■■■■■■■■■■■"));
 
         item.shopItem.setLore(lore.toArray(new String[0]));

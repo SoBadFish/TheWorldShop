@@ -46,15 +46,19 @@ public abstract class BaseLanguage {
 
     public String itemHasChose = "已选择 √";
 
-    public String shopItemLore1 = "出售者";
+    public String shopItemLore1 = "出售者 | &a[1]";
 
     public String shopItemLore2 = "官方出售";
 
-    public String shopItemLore3 = "价格";
+    public String shopItemLore3 = "价格 |  &a[1] &r(&e↑[2])";
 
-    public String shopItemLore4 = "当前税收";
+    public String shopItemLore3NoTax = "价格 | &a[1] [2]";
 
-    public String shopItemLore5 = "双击购买";
+    public String shopItemLore4 = "当前税收 | &a[1]";
+
+    public String shopItemLore5 = "限购 | &a[1]";
+
+    public String shopItemLore6 = "双击购买";
 
     public String panelStringExceptSell = "预计出售";
 
@@ -108,6 +112,7 @@ public abstract class BaseLanguage {
     public String showItemCountMax = "最大物品上限 &e[1] &a件\n";
 
     public String showItemTax = "当前税收 &e[1] ％\n";
+
 
     public String showPublicItemCountInfo = "共计 &e[1] &a件物品\n";
 

@@ -23,6 +23,16 @@ public class PlayerDataManager {
         this.playerData = playerData;
     }
 
+    public int getBuyCount(String playerName,ShopItem shopItem){
+        if(playerData.containsKey(playerName)){
+            PlayerData data = playerData.get(playerName);
+            if(data.buyItem.containsKey(shopItem.uuid)){
+                return data.buyItem.get(shopItem.uuid);
+            }
+        }
+        return 0;
+    }
+
     public boolean chunkBuyItem(String playerName,ShopItem item){
         if(item.limit > 0){
             PlayerData data = new PlayerData();

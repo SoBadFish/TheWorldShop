@@ -79,7 +79,7 @@ public class DisplayPanel implements InventoryHolder {
         }
 
         shopItems = TheWorldShopMainClass.SELL_MANAGER.getPlayerShopItem(infoManager.getPlayerName(),shopItems,page);
-        return getItemsTo(infoManager.getPage(),shopItems,maxPage,true,infoManager.isWindows());
+        return getItemsTo(infoManager,infoManager.getPage(),shopItems,maxPage,true,infoManager.isWindows());
 
     }
 
@@ -183,7 +183,7 @@ public class DisplayPanel implements InventoryHolder {
             page = maxPage;
         }
         shopItems = TheWorldShopMainClass.SELL_MANAGER.getArrayListByPage(page,shopItems);
-        return getItemsTo(infoManager.getPage(),shopItems,maxPage,false,infoManager.isWindows());
+        return getItemsTo(infoManager,infoManager.getPage(),shopItems,maxPage,false,infoManager.isWindows());
     }
 
     public static Map<Integer, Item> getItemPanel(PlayerInfoManager infoManager){
@@ -318,7 +318,7 @@ public class DisplayPanel implements InventoryHolder {
     }
 
 
-    private static Map<Integer, Item> getItemsTo(int page, ArrayList<ShopItem> shopItems,int maxPage,boolean my,boolean isWindows){
+    private static Map<Integer, Item> getItemsTo(PlayerInfoManager infoManager,int page, ArrayList<ShopItem> shopItems,int maxPage,boolean my,boolean isWindows){
         int index = 0;
         if(page > maxPage){
             page = maxPage;
@@ -350,7 +350,7 @@ public class DisplayPanel implements InventoryHolder {
             panel.put(index, IntervalItem.toItem("&r&c"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.tipInfoClickTwo),lore));
         }
         for(ShopItem shopItem: shopItems){
-            panel.put(index,shopItem.toItem());
+            panel.put(index,shopItem.toItem(infoManager.getPlayerName()));
             index++;
         }
         if(my) {
