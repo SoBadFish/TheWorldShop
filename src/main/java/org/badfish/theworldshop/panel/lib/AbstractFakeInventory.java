@@ -80,7 +80,7 @@ public abstract class AbstractFakeInventory extends ContainerInventory {
                 Vector3 blockPosition = blocks.get(index).asVector3();
                 UpdateBlockPacket updateBlock = new UpdateBlockPacket();
                 if(IS_PM1E){
-                    updateBlock.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(471,who.getLevel().getBlock(blockPosition).getFullId());
+                    updateBlock.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(who.protocol,who.getLevel().getBlock(blockPosition).getFullId());
                 }else{
                     updateBlock.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(who.getLevel().getBlock(blockPosition).getFullId());
                 }
