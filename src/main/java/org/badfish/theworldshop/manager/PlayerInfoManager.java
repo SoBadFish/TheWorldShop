@@ -86,6 +86,8 @@ public class PlayerInfoManager {
         settings.add(itemType);
     }
 
+
+
     public MoneySellItem.MoneyType getMoneyType() {
         return moneyType;
     }

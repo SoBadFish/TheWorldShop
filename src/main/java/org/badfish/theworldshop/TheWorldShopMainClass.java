@@ -10,10 +10,7 @@ import org.badfish.theworldshop.language.BaseLanguage;
 import org.badfish.theworldshop.language.LanguageManager;
 import org.badfish.theworldshop.language.langs.ChineseLanguage;
 import org.badfish.theworldshop.language.langs.EnglishLanguage;
-import org.badfish.theworldshop.manager.CustomItemManager;
-import org.badfish.theworldshop.manager.MoneyItemManager;
-import org.badfish.theworldshop.manager.PlayerSellItemManager;
-import org.badfish.theworldshop.manager.SellItemManager;
+import org.badfish.theworldshop.manager.*;
 import org.badfish.theworldshop.panel.ChestInventoryPanel;
 import org.badfish.theworldshop.panel.lib.AbstractFakeInventory;
 
@@ -39,6 +36,8 @@ public class TheWorldShopMainClass extends PluginBase {
     public static TheWorldShopConfig WORLD_CONFIG;
 
     public static CustomItemManager CUSTOM_ITEM;
+
+    public static PlayerDataManager PLAYER_DATA;
 
     public static MoneyItemManager MONEY_ITEM;
 
@@ -105,6 +104,7 @@ public class TheWorldShopMainClass extends PluginBase {
         SELL_MANAGER = SellItemManager.loadManager(new Config(getDataFolder()+"/items.yml",Config.YAML));
         CUSTOM_ITEM = CustomItemManager.initCustomItem(new Config(getDataFolder()+"/takeItems.yml",Config.YAML));
         MONEY_ITEM = MoneyItemManager.initManager(new Config(getDataFolder()+"/sellmoney.yml",Config.YAML));
+        PLAYER_DATA = PlayerDataManager.initManager(new Config(getDataFolder()+"/playerData.yml",Config.YAML));
     }
 
     public void save(){
@@ -116,6 +116,9 @@ public class TheWorldShopMainClass extends PluginBase {
         }
         if(SELL_MANAGER != null) {
             MONEY_ITEM.save();
+        }
+        if(PLAYER_DATA != null){
+            PLAYER_DATA.save();
         }
     }
 

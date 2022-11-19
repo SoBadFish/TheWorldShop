@@ -61,6 +61,12 @@ public class DisplayPanel implements InventoryHolder {
                         shopItems = TheWorldShopMainClass.SELL_MANAGER.getShopItemsLikeItem(infoManager.getChoseItem(), shopItems);
                     }
                     break;
+                case HIDE_LIMIT:
+                    shopItems = TheWorldShopMainClass.SELL_MANAGER.hiddenLimitItems(shopItems);
+                    break;
+                case ONLY_DISPLAY_LIMIT:
+                    shopItems = TheWorldShopMainClass.SELL_MANAGER.onlyDisplayLimitItems(shopItems);
+                    break;
                 default:break;
             }
         }
@@ -284,6 +290,8 @@ public class DisplayPanel implements InventoryHolder {
             panel.put(PlayerShopItem.getIndex(),PlayerShopItem.toItem("&r"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.itemPanelSettingByPlayerShop),infoManager.isSetting(ItemType.PLAYER_SELL)));
             panel.put(ItemSeekItem.getIndex(),ItemSeekItem.toItem("&r"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.itemPanelSettingByItem),infoManager.isSetting(ItemType.ITEM)));
             panel.put(MoneyTypeItem.getIndex(),MoneyTypeItem.toItem("&r"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.itemPanelSettingByMoneyType),infoManager.isSetting(ItemType.MONEY_TYPE)));
+            panel.put(HiddenLimitItem.getIndex(),HiddenLimitItem.toItem("&r"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.itemPanelSettingByHiddenItem),infoManager.isSetting(ItemType.HIDE_LIMIT)));
+            panel.put(DisplayLimitItem.getIndex(),DisplayLimitItem.toItem("&r"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.itemPanelSettingByOnlyDisplayItem),infoManager.isSetting(ItemType.ONLY_DISPLAY_LIMIT)));
         }else{
             panel.put(21 - 4, OrderItem.toItem("&r"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.itemPanelSettingByMoney),infoManager.isSetting(ItemType.ORDER)));
             panel.put(22 - 4, PlayerItem.toItem("&r"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.itemPanelSettingByPlayer),infoManager.isSetting(ItemType.PLAYER)));
@@ -292,6 +300,8 @@ public class DisplayPanel implements InventoryHolder {
             panel.put(25 - 4,PlayerShopItem.toItem("&r"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.itemPanelSettingByPlayerShop),infoManager.isSetting(ItemType.PLAYER_SELL)));
             panel.put(26 - 4,ItemSeekItem.toItem("&r"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.itemPanelSettingByItem),infoManager.isSetting(ItemType.ITEM)));
             panel.put(27 - 4,MoneyTypeItem.toItem("&r"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.itemPanelSettingByMoneyType),infoManager.isSetting(ItemType.MONEY_TYPE)));
+            panel.put(28- 4,HiddenLimitItem.toItem("&r"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.itemPanelSettingByHiddenItem),infoManager.isSetting(ItemType.HIDE_LIMIT)));
+            panel.put(29 - 4,DisplayLimitItem.toItem("&r"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.itemPanelSettingByOnlyDisplayItem),infoManager.isSetting(ItemType.ONLY_DISPLAY_LIMIT)));
         }
 
         for(int index = 0;index < LINE_SIZE;index++){

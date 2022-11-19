@@ -56,6 +56,10 @@ itemPanelSettingByItem: "According to item screening"
 
 itemPanelSettingByMoneyType: "Depending on the type of currency"
 
+itemPanelSettingByHiddenItem: "Hide the items for purchasing"
+
+itemPanelSettingByOnlyDisplayItem: "Show only the items for purchasing"
+
 itemPanelPlaceSetting: "Please set the filter condition"
 
 itemPanelDataInfo: "data info"

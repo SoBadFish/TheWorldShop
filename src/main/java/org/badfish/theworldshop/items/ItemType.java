@@ -26,8 +26,14 @@ public enum  ItemType {
     SYSTEM_SELL("systemSell"),
     /**玩家出售*/
     PLAYER_SELL("playerSell"),
-    /**筛选条件 金钱类型*/
 
+    /**筛选条件 隐藏限购物品*/
+    HIDE_LIMIT("hideLimit"),
+
+    /**筛选条件 只显示限购物品*/
+    ONLY_DISPLAY_LIMIT("onlyDisplayLimit"),
+
+    /**筛选条件 金钱类型*/
     MONEY_TYPE("moneyType"),
     /**筛选条件 金钱类型 - sub*/
     MONEY_SUB_ITEM("moneySubItem"),

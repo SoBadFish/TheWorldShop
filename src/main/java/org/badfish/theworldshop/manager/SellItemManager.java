@@ -157,6 +157,21 @@ public class SellItemManager {
         return shopItems;
     }
 
+    /**
+     * 只显示限购
+     * */
+    public ArrayList<ShopItem> onlyDisplayLimitItems(ArrayList<ShopItem> shopItems){
+        shopItems.removeIf(item->item.limit <= 0);
+        return shopItems;
+    }
+
+    /**
+     * 隐藏限购
+     * */
+    public ArrayList<ShopItem> hiddenLimitItems(ArrayList<ShopItem> shopItems){
+        shopItems.removeIf(item->item.limit > 0);
+        return shopItems;
+    }
 
 
 
@@ -179,6 +194,8 @@ public class SellItemManager {
         shopItems.sort(comp);
         return shopItems;
     }
+
+
 
     public ArrayList<ShopItem> orderCountItems(ArrayList<ShopItem> shopItems){
         Comparator<ShopItem> comp = Comparator.comparingInt(ShopItem::getId);

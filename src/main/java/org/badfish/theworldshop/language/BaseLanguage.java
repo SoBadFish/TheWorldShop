@@ -87,6 +87,11 @@ public abstract class BaseLanguage {
 
     public String itemPanelSettingByPlayerShop = "筛选玩家商店";
 
+    public String itemPanelSettingByHiddenItem = "隐藏限购物品";
+
+    public String itemPanelSettingByOnlyDisplayItem = "只显示限购物品";
+
+
     public String itemPanelSettingByItem = "根据物品筛选";
 
     public String itemPanelSettingByMoneyType = "根据货币类型筛选";
@@ -158,6 +163,7 @@ public abstract class BaseLanguage {
 
     public String playerMoneyError = "&c您的 [1] 不足";
 
+    public String playerLimitError = "&c此物品只允许购买 [1] 次";
 
 
 

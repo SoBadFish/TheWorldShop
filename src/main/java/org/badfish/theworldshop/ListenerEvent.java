@@ -172,6 +172,20 @@ public class ListenerEvent implements Listener {
                     }
                     inventory.setContents(DisplayPanel.getItemPanel(playerInfoManager));
                     break;
+                case HIDE_LIMIT:
+                    if(playerInfoManager.isSetting(ItemType.ONLY_DISPLAY_LIMIT)){
+                        playerInfoManager.addSettings(ItemType.ONLY_DISPLAY_LIMIT);
+                    }
+                    playerInfoManager.addSettings(type);
+                    player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB,1,1,player);
+                    break;
+                case ONLY_DISPLAY_LIMIT:
+                    if(playerInfoManager.isSetting(ItemType.HIDE_LIMIT)){
+                        playerInfoManager.addSettings(ItemType.HIDE_LIMIT);
+                    }
+                    playerInfoManager.addSettings(type);
+                    player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB,1,1,player);
+                    break;
                 case PLAYER_SELL:
                 case ORDER_COUNT:
                 case ORDER:
@@ -472,6 +486,14 @@ public class ListenerEvent implements Listener {
                 return;
             }
 
+            //限购
+            if(!TheWorldShopMainClass.PLAYER_DATA.chunkBuyItem(player.getName(),shopItem)){
+                player.getLevel().addSound(player.getPosition(),Sound
+                        .MOB_VILLAGER_NO,1,1,player);
+                player.sendActionBar(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.playerLimitError,shopItem.limit)));
+                event.setCancelled();
+                return;
+            }
 
             if(loadMoney.myMoney(player) >= sellMoney){
                 if(player.getInventory().canAddItem(shopItem.getDefaultItem())){
