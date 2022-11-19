@@ -293,6 +293,8 @@ public class ListenerEvent implements Listener {
                 case ORDER_COUNT:
                 case SYSTEM_SELL:
                 case PLAYER_SELL:
+                case HIDE_LIMIT:
+                case ONLY_DISPLAY_LIMIT:
                     displaySetting(player, item, playerInfoManager, type, inventory);
                     break;
                 case PLAYER:
