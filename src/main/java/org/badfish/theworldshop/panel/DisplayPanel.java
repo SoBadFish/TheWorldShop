@@ -174,6 +174,12 @@ public class DisplayPanel implements InventoryHolder {
                         shopItems = TheWorldShopMainClass.SELL_MANAGER.getPlayerAllShopItem(infoManager.getChosePlayer(), shopItems);
                     }
                     break;
+                case HIDE_LIMIT:
+                    shopItems = TheWorldShopMainClass.SELL_MANAGER.hiddenLimitItems(shopItems);
+                    break;
+                case ONLY_DISPLAY_LIMIT:
+                    shopItems = TheWorldShopMainClass.SELL_MANAGER.onlyDisplayLimitItems(shopItems);
+                    break;
                 default:break;
             }
         }

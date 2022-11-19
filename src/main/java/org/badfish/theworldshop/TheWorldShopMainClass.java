@@ -101,10 +101,10 @@ public class TheWorldShopMainClass extends PluginBase {
 
         this.saveResource("items.yml",false);
         WORLD_CONFIG = TheWorldShopConfig.load(getConfig());
-        SELL_MANAGER = SellItemManager.loadManager(new Config(getDataFolder()+"/items.yml",Config.YAML));
         CUSTOM_ITEM = CustomItemManager.initCustomItem(new Config(getDataFolder()+"/takeItems.yml",Config.YAML));
         MONEY_ITEM = MoneyItemManager.initManager(new Config(getDataFolder()+"/sellmoney.yml",Config.YAML));
         PLAYER_DATA = PlayerDataManager.initManager(new Config(getDataFolder()+"/playerData.yml",Config.YAML));
+        SELL_MANAGER = SellItemManager.loadManager(new Config(getDataFolder()+"/items.yml",Config.YAML));
     }
 
     public void save(){

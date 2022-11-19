@@ -25,7 +25,7 @@ shopItemLore2: "官方出售"
 shopItemLore3: "价格 |  &a[1] &r(&e↑[2])"
 shopItemLore3NoTax: "价格 | &a[1] [2]"
 shopItemLore4: "当前税收 | &a[1]"
-shopItemLore5: "限购 | &a[1]/[2]"
+shopItemLore5: "限购 | &a[1] / [2]"
 shopItemLore6: "双击购买"
 panelStringExceptSell: "预计出售"
 
@@ -108,9 +108,9 @@ sellItemClickAgain: "再点一次出售物品"
 sellItemClickRemoveAgain: "再点一次撤销物品"
 
 sellItemClickBuyAgain: "再点击一次购买"
-sellItemSuccess: "&a出售成功获得&e[1][2]"
+sellItemSuccess: "&a出售成功获得&e[1] [2]"
 
-buyItemSuccess: "&a购买成功!&e花费&f[1][2]}"
+buyItemSuccess: "&a购买成功!&e花费&f[1] [2]"
 
 playerInventoryError: "您的背包没有空间"
 

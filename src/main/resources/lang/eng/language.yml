@@ -23,7 +23,7 @@ shopItemLore2: "The official sale"
 shopItemLore3: "price |  &a[1] &r(&e↑[2])"
 shopItemLore3NoTax: "price | &a[1] [2]"
 shopItemLore4: "The current tax | &a[1]"
-shopItemLore5: "Quota | &a[1]/[2]"
+shopItemLore5: "Quota | &a[1] / [2]"
 panelStringExceptSell: "Is expected to sell"
 playerPanelTitleUp: "Please select items for sale"
 

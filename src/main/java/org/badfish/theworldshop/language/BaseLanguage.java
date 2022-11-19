@@ -173,7 +173,6 @@ public abstract class BaseLanguage {
 
 
 
-
     public BaseLanguage(){}
 
     public void languageLoadByConfig(Config config){
@@ -194,6 +193,7 @@ public abstract class BaseLanguage {
             int index = 0;
             for (Object var : transferVariables) {
                 transferVariables1[index] = new TransferVariable(index + 1, var);
+                index++;
             }
         }
         return getLang(input,transferVariables1);
