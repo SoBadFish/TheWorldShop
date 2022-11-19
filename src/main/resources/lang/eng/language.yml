@@ -96,7 +96,7 @@ sellItemWindowsTitle: "Please enter the purchase price"
 sellItemWindowsInputInfo: "Please enter the amount of money that you want to sell"
 sellItemWindowsDropDownInfo: "Please select the type of currency in payment"
 sellItemWindowsToggleInfo: "Whether to store server(Don't consume quantity)"
-sellItemWindowsLimit: "Commodity purchase quantity (- 1 for no limit)";
+sellItemWindowsLimit: "Commodity purchase quantity (- 1 for no limit)"
 sellItemClickAgain: "Click again sell items"
 
 sellItemClickRemoveAgain: "Another Click to cancel items"
@@ -104,7 +104,7 @@ sellItemClickRemoveAgain: "Another Click to cancel items"
 sellItemClickBuyAgain: "Click on a buy again"
 sellItemSuccess: "&aSell success ! getting: &e[1][2]"
 
-buyItemSuccess: "&aBuy success ! &eput in&f[1][2]}"
+buyItemSuccess: "&aBuy success ! &eput in&f[1][2]"
 
 playerInventoryError: "Your backpack no space"
 
