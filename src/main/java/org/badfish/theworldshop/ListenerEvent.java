@@ -178,6 +178,7 @@ public class ListenerEvent implements Listener {
                     }
                     playerInfoManager.addSettings(type);
                     player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB,1,1,player);
+                    inventory.setContents(DisplayPanel.getSettingPanel(playerInfoManager));
                     break;
                 case ONLY_DISPLAY_LIMIT:
                     if(playerInfoManager.isSetting(ItemType.HIDE_LIMIT)){
@@ -185,6 +186,7 @@ public class ListenerEvent implements Listener {
                     }
                     playerInfoManager.addSettings(type);
                     player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB,1,1,player);
+                    inventory.setContents(DisplayPanel.getSettingPanel(playerInfoManager));
                     break;
                 case PLAYER_SELL:
                 case ORDER_COUNT:
