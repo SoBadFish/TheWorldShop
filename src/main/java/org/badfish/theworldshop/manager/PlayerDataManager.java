@@ -47,6 +47,8 @@ public class PlayerDataManager {
                     return true;
                 }
             }
+        }else{
+            return true;
         }
         return false;
     }
