@@ -6,19 +6,19 @@
 
     <groupId>org.badfish.theworldshop</groupId>
     <artifactId>TheWorldShop</artifactId>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
     <dependencies>
         <dependency>
             <groupId>cn.nukkit</groupId>
             <artifactId>Nukkit</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath> ${project.basedir}/lib/powernukkitx-1.6.0.0-PNX.jar</systemPath>
+            <systemPath> ${project.basedir}/lib/Nukkit-PM1E.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>RELEASE</version>
+            <version>1.18.24</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
