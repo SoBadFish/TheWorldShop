@@ -62,6 +62,12 @@ public class ListenerEvent implements Listener {
     public void onUp(PlayerSellItemEvent event){
         Item item = event.getItem();
         Player player = event.getPlayer();
+
+        if(player.isOp()){
+            player.getInventory().removeItem(item);
+            player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellSuccess,event.getMoney())));
+            return;
+        }
         if(TheWorldShopMainClass.SELL_MANAGER.getPlayerSellCount(player.getName()) <
                 TheWorldShopMainClass.WORLD_CONFIG.getPlayerSellMax()) {
             player.getInventory().removeItem(item);
