@@ -81,7 +81,7 @@ tipRefresh: "Refresh"
 
 tipInfoChose: "Screen"
 
-sellSuccess: "&aSell items success ! price: &e[1]"
+sellSuccess: "&aSell items success ! price: &e[1] &7(tax: [2])"
 
 sellMaxError: "You can't be on more items"
 

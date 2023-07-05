@@ -128,7 +128,7 @@ public abstract class BaseLanguage {
 
     //event info
 
-    public String sellSuccess = "&a出售物品成功 价格&e[1]";
+    public String sellSuccess = "&a出售物品成功 价格&e[1]  &7（税收: [2]）";
 
     public String sellMaxError = "你无法上架更多的物品";
 

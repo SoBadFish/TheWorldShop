@@ -87,7 +87,7 @@ tipRefresh: "刷新"
 
 tipInfoChose: "筛选"
 
-sellSuccess: "&a出售物品成功价格&e[1]"
+sellSuccess: "&a出售物品成功 价格&e[1]  &7（税收: [2]）"
 
 sellMaxError: "你无法上架更多的物品"
 
