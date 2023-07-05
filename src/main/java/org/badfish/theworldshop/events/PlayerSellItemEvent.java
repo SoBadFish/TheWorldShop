@@ -5,6 +5,7 @@ import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.HandlerList;
 import cn.nukkit.event.player.PlayerEvent;
 import cn.nukkit.item.Item;
+import org.badfish.theworldshop.items.ShopItem;
 
 /**
  * @author BadFish
@@ -17,13 +18,13 @@ public class PlayerSellItemEvent extends PlayerEvent implements Cancellable {
         return HANDLER_LIST;
     }
 
-    private Item item;
+    private ShopItem item;
 
     private double money;
 
     private boolean isRemove;
 
-    public PlayerSellItemEvent(Player player, Item item,double money,boolean isRemove){
+    public PlayerSellItemEvent(Player player, ShopItem item, double money, boolean isRemove){
         this.player = player;
         this.item = item;
         this.money = money;
@@ -38,7 +39,7 @@ public class PlayerSellItemEvent extends PlayerEvent implements Cancellable {
         isRemove = remove;
     }
 
-    public Item getItem() {
+    public ShopItem getItem() {
         return item;
     }
 

@@ -50,11 +50,10 @@ public abstract class BaseLanguage {
 
     public String shopItemLore2 = "官方出售";
 
-    public String shopItemLore3 = "价格 |  &a[1] &r(&e↑[2])";
+    public String shopItemLore3 = "价格 |  &a[1] ";
 
     public String shopItemLore3NoTax = "价格 | &a[1] [2]";
 
-    public String shopItemLore4 = "当前税收 | &a[1]";
 
     public String shopItemLore5 = "限购 | &a[1]";
 

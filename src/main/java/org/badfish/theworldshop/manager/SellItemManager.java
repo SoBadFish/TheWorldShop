@@ -212,12 +212,13 @@ public class SellItemManager {
     }
 
     public void addSellItem(Player player, Item item, MoneySellItem.MoneyType moneyType, double money, boolean isRemove,int limit){
-        PlayerSellItemEvent event = new PlayerSellItemEvent(player, item, money,isRemove);
+
+        ShopItem shopItem = ShopItem.cloneTo(UUID.randomUUID(),item,player.getName(),moneyType,money,isRemove,limit);
+        PlayerSellItemEvent event = new PlayerSellItemEvent(player, shopItem, money,isRemove);
         Server.getInstance().getPluginManager().callEvent(event);
         if(event.isCancelled()){
             return;
         }
-        ShopItem shopItem = ShopItem.cloneTo(UUID.randomUUID(),item,player.getName(),moneyType,money,isRemove,limit);
         this.addItem(shopItem);
     }
 

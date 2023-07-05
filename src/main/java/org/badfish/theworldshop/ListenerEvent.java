@@ -60,17 +60,27 @@ public class ListenerEvent implements Listener {
 
     @EventHandler
     public void onUp(PlayerSellItemEvent event){
-        Item item = event.getItem();
+        ShopItem item = event.getItem();
         Player player = event.getPlayer();
 
         if(player.isOp()){
-            player.getInventory().removeItem(item);
+            player.getInventory().removeItem(item.getDefaultItem());
             player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellSuccess,event.getMoney())));
             return;
         }
+        double tax = event.getMoney() * TheWorldShopMainClass.WORLD_CONFIG.getTax();
+        LoadMoney loadMoney = new LoadMoney(item.getMoneyType());
+        if(loadMoney.myMoney(player) >= tax){
+            loadMoney.reduceMoney(player,tax);
+        }else{
+            player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.playerMoneyError,TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(item.getMoneyType()))));
+            event.setCancelled();
+            return;
+        }
+
         if(TheWorldShopMainClass.SELL_MANAGER.getPlayerSellCount(player.getName()) <
                 TheWorldShopMainClass.WORLD_CONFIG.getPlayerSellMax()) {
-            player.getInventory().removeItem(item);
+            player.getInventory().removeItem(item.getDefaultItem());
             player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellSuccess,event.getMoney())));
         }else{
             player.sendMessage(TextFormat.colorize('&',"&7[&r"+TheWorldShopMainClass.WORLD_CONFIG.getTitle()+"&7]&r "+"&c"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellMaxError)));

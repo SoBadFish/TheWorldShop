@@ -166,12 +166,7 @@ public class ShopItem  {
             lore = asList(loreItem);
         }
         double m = 0;
-        if(TheWorldShopMainClass.WORLD_CONFIG.getTax() > 0) {
-           m = TheWorldShopMainClass.
-                    WORLD_CONFIG.getTax() * sellMoney;
-        }
 
-        String m1 = String.format("%.2f",m);
         lore.add(TextFormat.colorize('&',"&r&7■■■■■■■■■■■■■■■■■■■■"));
 
         lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore1,sellPlayer)));
@@ -180,9 +175,7 @@ public class ShopItem  {
             lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3NoTax,sellMoney,TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(moneyType))));
         }else{
             if(TheWorldShopMainClass.WORLD_CONFIG.getTax() > 0){
-                lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3,(sellMoney + m),m1)));
-                lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore4,(TheWorldShopMainClass.
-                        WORLD_CONFIG.getTax() * 100) + "％")));
+                lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3,sellMoney)));
             }else{
                 lore.add(TextFormat.colorize('&',"&r&e"+TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.shopItemLore3NoTax,sellMoney,TheWorldShopMainClass.WORLD_CONFIG.getMoneyTypeName(moneyType))));
             }
