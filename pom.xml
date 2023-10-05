@@ -6,7 +6,7 @@
 
     <groupId>org.badfish.theworldshop</groupId>
     <artifactId>TheWorldShop</artifactId>
-    <version>1.2.6</version>
+    <version>1.3.0</version>
     <dependencies>
         <dependency>
             <groupId>cn.nukkit</groupId>

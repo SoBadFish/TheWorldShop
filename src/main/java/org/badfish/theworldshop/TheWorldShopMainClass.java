@@ -126,13 +126,18 @@ public class TheWorldShopMainClass extends PluginBase {
         boolean ver = false;
         //双核心兼容
         try {
-            Class c = Class.forName("cn.nukkit.Nukkit");
+            Class<?> c = Class.forName("cn.nukkit.Nukkit");
             c.getField("NUKKIT_PM1E");
             ver = true;
 
-        } catch (ClassNotFoundException | NoSuchFieldException ignore) {
-
+        } catch (ClassNotFoundException | NoSuchFieldException ignore) { }
+        try {
+            Class<?> c = Class.forName("cn.nukkit.Nukkit");
+            c.getField("NUKKIT").get(c).toString().equalsIgnoreCase("Nukkit PetteriM1 Edition");
+            ver = true;
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException ignore) {
         }
+
         AbstractFakeInventory.IS_PM1E = ver;
         if(ver){
             this.getLogger().info(language.getLang(language.loadInfo3));
@@ -140,6 +145,7 @@ public class TheWorldShopMainClass extends PluginBase {
             this.getLogger().info(language.getLang(language.loadInfo4));
         }
     }
+
 
     @Override
     public void onDisable() {
