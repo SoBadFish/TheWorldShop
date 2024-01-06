@@ -3,6 +3,8 @@ package org.badfish.theworldshop.manager;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.item.Item;
+import cn.nukkit.nbt.NBTIO;
+import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.Config;
 import org.badfish.theworldshop.TheWorldShopMainClass;
 import org.badfish.theworldshop.events.PlayerSellItemEvent;
@@ -10,6 +12,8 @@ import org.badfish.theworldshop.items.MoneySellItem;
 import org.badfish.theworldshop.items.ShopItem;
 import org.badfish.theworldshop.utils.Tool;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -277,18 +281,24 @@ public class SellItemManager {
 
 
 
-    public void save(){
+    public void save() {
         Config config = new Config(TheWorldShopMainClass.MAIN_INSTANCE.getDataFolder()+"/items.yml",Config.YAML);
         List<Map<?,?>> list = new ArrayList<>();
         LinkedHashMap<String, Object> map;
         for(ShopItem shopItem: sellItems){
             map = new LinkedHashMap<>();
-            map.put("id",shopItem.getDefaultItem().getId()+":"+shopItem.getDefaultItem().getDamage());
-            map.put("count",shopItem.getDefaultItem().getCount());
-            if(shopItem.getDefaultItem().hasCompoundTag()) {
-                map.put("tag", Tool.bytesToHexString(shopItem.getDefaultItem().getCompoundTag()));
-            }else{
-                map.put("tag","not");
+            try{
+                CompoundTag compoundTag = NBTIO.putItemHelper(shopItem.getDefaultItem());
+                String by = new String(NBTIO.write(compoundTag), StandardCharsets.UTF_8);
+                map.put("item", by);
+            }catch (Exception ignore){
+                map.put("id",shopItem.getDefaultItem().getId()+":"+shopItem.getDefaultItem().getDamage());
+                map.put("count",shopItem.getDefaultItem().getCount());
+                if(shopItem.getDefaultItem().hasCompoundTag()) {
+                    map.put("tag", Tool.bytesToHexString(shopItem.getDefaultItem().getCompoundTag()));
+                }else{
+                    map.put("tag","not");
+                }
             }
             map.put("uuid",shopItem.uuid.toString());
             map.put("limit",shopItem.limit);

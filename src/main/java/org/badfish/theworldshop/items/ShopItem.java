@@ -1,11 +1,13 @@
 package org.badfish.theworldshop.items;
 
 import cn.nukkit.item.Item;
+import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
 import org.badfish.theworldshop.TheWorldShopMainClass;
 import org.badfish.theworldshop.utils.Tool;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -77,19 +79,24 @@ public class ShopItem  {
     public static ShopItem formMap(Map<?,?> map){
         try {
             Item i = Item.fromString(map.get("id").toString());
+            if(map.containsKey("item")){
+                i = NBTIO.getItemHelper(NBTIO.read(map.get("item").toString().getBytes(StandardCharsets.UTF_8)));
+            }else{
+                i.setCount(Integer.parseInt(map.get("count").toString()));
+                String tag = map.get("tag").toString();
+
+                if (!"not".equalsIgnoreCase(tag)) {
+                    byte[] tagForm = Tool.hexStringToBytes(tag);
+                    if(tagForm != null){
+                        i.setCompoundTag(Item.parseCompoundTag(tagForm));
+                    }
+                }
+            }
             //过滤空气
             if(i.getId() == 0){
                 return null;
             }
-            i.setCount(Integer.parseInt(map.get("count").toString()));
-            String tag = map.get("tag").toString();
-
-            if (!"not".equalsIgnoreCase(tag)) {
-                byte[] tagForm = Tool.hexStringToBytes(tag);
-                if(tagForm != null){
-                    i.setCompoundTag(Item.parseCompoundTag(tagForm));
-                }
-            }
+//
             UUID uuid = UUID.randomUUID();
             if(map.containsKey("uuid")){
                 uuid = UUID.fromString(map.get("uuid").toString());
