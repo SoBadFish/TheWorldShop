@@ -72,6 +72,7 @@ public abstract class AbstractFakeInventory extends ContainerInventory {
     @Override
     public void onClose(Player who) {
         super.onClose(who);
+        clearAll();
         OPEN.remove(who, this);
         List<BlockVector3> blocks = blockPositions.get(who);
         for (int i = 0, size = blocks.size(); i < size; i++) {

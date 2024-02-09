@@ -49,6 +49,7 @@ public class ChestInventoryPanel extends DoubleChestFakeInventory implements Inv
 
     @Override
     public void onClose(Player who) {
+        clearAll();
         RemoveEntityPacket pk = new RemoveEntityPacket();
         pk.eid = id;
         who.dataPacket(pk);

@@ -1,6 +1,6 @@
 name: TheWorldShop
 main: org.badfish.theworldshop.TheWorldShopMainClass
-version: 1.3.1
+version: 1.3.2
 api: 1.0.11
 author: 某吃瓜咸鱼
 permissions:
