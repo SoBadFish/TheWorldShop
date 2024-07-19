@@ -42,7 +42,7 @@ import java.util.Map;
  */
 public class ListenerEvent implements Listener {
 
-    private static final int MONEY_UI_NUMBER = 0x5014;
+    private static final int MONEY_UI_NUMBER = 0x501416;
 
     public static LinkedHashMap<Player,ShopItem> BUY_LOCK = new LinkedHashMap<>();
 
@@ -324,21 +324,28 @@ public class ListenerEvent implements Listener {
                     player.getLevel().addSound(player.getPosition(), Sound.RANDOM_ORB,1,1,player);
                     inventory.close(player);
                     SELL_ITEM.put(player,item.clone());
-                    FormWindowCustom custom = new FormWindowCustom(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsTitle));
-                    custom.addElement(new ElementInput(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsInputInfo)));
-                    ArrayList<String> moneyType = new ArrayList<>();
-                    for(MoneySellItem.MoneyType moneyType1: MoneySellItem.MoneyType.values()){
-                        if(LoadMoney.isEnable(moneyType1)){
-                            moneyType.add(moneyType1.name());
-                        }
-                    }
-                    custom.addElement(new ElementDropdown(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsDropDownInfo),moneyType));
-                    if(player.isOp()){
-                        custom.addElement(new ElementToggle(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsToggleInfo)));
-                        custom.addElement(new ElementInput(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsLimit)));
+                    TheWorldShopMainClass.MAIN_INSTANCE.getServer().getScheduler().scheduleDelayedTask(TheWorldShopMainClass.MAIN_INSTANCE, new Runnable() {
+                        @Override
+                        public void run() {
+                            FormWindowCustom custom = new FormWindowCustom(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsTitle));
+                            custom.addElement(new ElementInput(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsInputInfo)));
+                            ArrayList<String> moneyType = new ArrayList<>();
+                            for(MoneySellItem.MoneyType moneyType1: MoneySellItem.MoneyType.values()){
+                                if(LoadMoney.isEnable(moneyType1)){
+                                    moneyType.add(moneyType1.name());
+                                }
+                            }
+                            custom.addElement(new ElementDropdown(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsDropDownInfo),moneyType));
+                            if(player.isOp()){
+                                custom.addElement(new ElementToggle(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsToggleInfo)));
+                                custom.addElement(new ElementInput(TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.sellItemWindowsLimit)));
 
-                    }
-                    player.showFormWindow(custom,MONEY_UI_NUMBER);
+                            }
+                            player.showFormWindow(custom,MONEY_UI_NUMBER);
+                        }
+                    },20);
+
+
                     break;
                 case MONEY_TYPE:
                     LOOK_MONEY_TYPE.add(player);

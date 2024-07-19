@@ -25,7 +25,8 @@ public class AddSubCommand extends BaseSubCommand {
     public boolean execute(CommandSender sender, String label, String[] args) {
         if(sender instanceof Player) {
             DisplayPanel panel = new DisplayPanel();
-            panel.displayPlayer((Player) sender,DisplayPanel.playerInventoryPanel(PlayerInfoManager.getInstance(sender.getName())), TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.addCommandPanelTitle));
+            panel.displayPlayer((Player) sender,DisplayPanel.playerInventoryPanel(PlayerInfoManager.getInstance(sender.getName())),
+                    TheWorldShopMainClass.language.getLang(TheWorldShopMainClass.language.addCommandPanelTitle));
         }
         return true;
     }
