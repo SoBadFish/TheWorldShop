@@ -58,6 +58,22 @@ public class TheWorldShopConfig {
                 ,config.getString("lang","chs"));
     }
 
+
+    public void reload(Config config){
+        this.moneyMax = config.getDouble("money-max",10000);
+        this.moneyMin = config.getDouble("money-min",0.1);
+        this.playerSellMax = config.getInt("player-sell-max",10);
+        this.tax = config.getDouble("tax",0.2);
+        this.language = LanguageManager.getLanguage(config.getString("lang","chs"));
+        this.title = config.getString("title","交易行");
+        this.moneyName = config.get("money-name",new LinkedHashMap<String, String>(){{
+            put("EconomyAPI","&e金币");
+            put("PlayerPoints","&d点券");
+            put("Money","&2金钱");
+
+        }});
+    }
+
     public String getTitle() {
         return title;
     }

@@ -97,7 +97,12 @@ public class MoneyItemManager {
              if(item.getName() != null){
                  name = item.getName();
              }else{
-                 name = item.getItem().getId()+":"+item.getItem().getDamage();
+                 if(item.getItem().getNamespaceId() != null){
+                     name = item.getItem().getNamespaceId();
+                 }else{
+                     name = item.getItem().getId()+":"+item.getItem().getDamage();
+                 }
+
              }
              map.put("type",itemDoubleEntry.getMoneyType().name());
              map.put("money",itemDoubleEntry.getMoney());
@@ -107,6 +112,18 @@ public class MoneyItemManager {
     }
 
     public static MoneyItemManager initManager(Config config){
+        return new MoneyItemManager(loadMoneyConfig(config));
+    }
+
+
+    public void reload(Config config) {
+        loadMoneyConfig(config);
+        ArrayList<MoneySellItem> infoManager = loadMoneyConfig(config);
+        this.infoManager.clear();
+        this.infoManager.addAll(infoManager);
+    }
+
+    private static ArrayList<MoneySellItem> loadMoneyConfig(Config config) {
         ArrayList<MoneySellItem> infoManager = new ArrayList<>();
         CustomItem customItem;
         Object o1;
@@ -117,8 +134,8 @@ public class MoneyItemManager {
             o1 = configMap.getValue();
             if(customItem != null) {
                 if (o1 instanceof Map) {
-                   type = MoneySellItem.MoneyType.valueOf(((Map) o1).get("type").toString());
-                   m = Double.parseDouble(((Map) o1).get("money").toString());
+                    type = MoneySellItem.MoneyType.valueOf(((Map) o1).get("type").toString());
+                    m = Double.parseDouble(((Map) o1).get("money").toString());
                     infoManager.add(new MoneySellItem(customItem, type, m));
                 } else {
                     infoManager.add(new MoneySellItem(customItem, MoneySellItem.MoneyType.EconomyAPI, (Double) configMap.getValue()));
@@ -126,8 +143,6 @@ public class MoneyItemManager {
             }
 //
         }
-        return new MoneyItemManager(infoManager);
+        return infoManager;
     }
-
-
 }

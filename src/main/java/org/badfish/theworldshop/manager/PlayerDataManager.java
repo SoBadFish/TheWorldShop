@@ -53,6 +53,22 @@ public class PlayerDataManager {
         return false;
     }
 
+    public void reload(Config config) {
+        LinkedHashMap<String,PlayerData> playerDatas = new LinkedHashMap<>();
+        Map<String, Object> objectMap = config.getAll();
+        for(String playerName: objectMap.keySet()){
+            Map<?,?> obj = (Map<?,?>) objectMap.get(playerName);
+            PlayerData data = new PlayerData();
+            for(Map.Entry<?,?> mo : obj.entrySet()){
+                data.buyItem.put(UUID.fromString(mo.getKey().toString()),
+                        Integer.parseInt(mo.getValue().toString()));
+            }
+            playerDatas.put(playerName,data);
+        }
+        this.playerData.clear();
+        this.playerData.putAll(playerDatas);
+    }
+
     private static class PlayerData{
 
         public LinkedHashMap<UUID,Integer> buyItem;

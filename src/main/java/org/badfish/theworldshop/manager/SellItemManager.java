@@ -7,6 +7,9 @@ import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.Config;
 import org.badfish.theworldshop.TheWorldShopMainClass;
+import org.badfish.theworldshop.configs.ShopItemSQLData;
+import org.badfish.theworldshop.db.ItemStr;
+import org.badfish.theworldshop.db.SqliteHelper;
 import org.badfish.theworldshop.events.PlayerSellItemEvent;
 import org.badfish.theworldshop.items.MoneySellItem;
 import org.badfish.theworldshop.items.ShopItem;
@@ -23,10 +26,14 @@ public class SellItemManager {
 
     private static final int ITEM_SIZE = 27;
 
-    private ArrayList<ShopItem> sellItems;
+    private final ArrayList<ShopItem> sellItems;
 
-    private SellItemManager(ArrayList<ShopItem> shopItems){
+
+    public SqliteHelper sqliteHelper;
+
+    private SellItemManager(ArrayList<ShopItem> shopItems,SqliteHelper sqliteHelper){
         this.sellItems = shopItems;
+        this.sqliteHelper = sqliteHelper;
     }
 
     public int maxSize(){
@@ -213,6 +220,8 @@ public class SellItemManager {
 
     public void removeItem(ShopItem shopItem){
         sellItems.remove(shopItem);
+        sqliteHelper.remove(TheWorldShopMainClass.DB_TABLE,"uuid",shopItem.uuid.toString());
+//        save();
     }
 
     public void addSellItem(Player player, Item item, MoneySellItem.MoneyType moneyType, double money, boolean isRemove,int limit){
@@ -228,6 +237,8 @@ public class SellItemManager {
 
     private void addItem(ShopItem shopItem){
         this.sellItems.add(shopItem);
+        sqliteHelper.add(TheWorldShopMainClass.DB_TABLE,ShopItemSQLData.shopItem2SQLData(shopItem));
+
     }
 
     public ArrayList<ShopItem> getShopItemByPage(int page){
@@ -235,13 +246,28 @@ public class SellItemManager {
     }
 
     public ArrayList<Item> getAllItem(){
+
         ArrayList<Item> arrayList = new ArrayList<>();
-        for(ShopItem shopItem: sellItems){
-            if(arrayList.contains(Item.get(shopItem.getDefaultItem().getId(),shopItem.getDefaultItem().getDamage()))){
+        List<ItemStr> strings = sqliteHelper.getColumnAllData(TheWorldShopMainClass.DB_TABLE,"item", ItemStr.class);
+
+        Item dataItem;
+        for(ItemStr s: strings){
+            try {
+                dataItem = NBTIO.getItemHelper(NBTIO.read(Base64.getDecoder().decode(s.item.getBytes(StandardCharsets.UTF_8))));
+            } catch (IOException e) {
                 continue;
             }
-            arrayList.add(Item.get(shopItem.getDefaultItem().getId(),shopItem.getDefaultItem().getDamage()));
+            if(dataItem == null){
+                continue;
+            }
+            arrayList.add(dataItem);
         }
+////        for(ShopItem shopItem: sellItems){
+////            if(arrayList.contains(Item.get(shopItem.getDefaultItem().getId(),shopItem.getDefaultItem().getDamage()))){
+////                continue;
+////            }
+////            arrayList.add(Item.get(shopItem.getDefaultItem().getId(),shopItem.getDefaultItem().getDamage()));
+////        }
         return arrayList;
     }
 
@@ -256,7 +282,7 @@ public class SellItemManager {
     }
 
     public static int mathShopItemPage(ArrayList<?> sellItems){
-        if(sellItems.size() == 0){
+        if(sellItems.isEmpty()){
             return 1;
         }
         return (int) Math.ceil(sellItems.size() / (double)ITEM_SIZE);
@@ -266,50 +292,53 @@ public class SellItemManager {
         return mathShopItemPage(sellItems);
     }
 
-    public static SellItemManager loadManager(Config config){
+    public static SellItemManager loadManager(SqliteHelper sqliteHelper) {
+        List<ShopItemSQLData> dbData = sqliteHelper.getAll(TheWorldShopMainClass.DB_TABLE, ShopItemSQLData.class);
         ArrayList<ShopItem> shopItems = new ArrayList<>();
-        List<Map> arrays = config.getMapList("sell");
-        ShopItem shopItem;
-        for(Map map : arrays){
-            shopItem = ShopItem.formMap(map);
-            if(shopItem != null){
-                shopItems.add(shopItem);
-            }
+        for (ShopItemSQLData shopItemSQLData : dbData) {
+            shopItems.add(shopItemSQLData.asShopItem());
         }
-        return new SellItemManager(shopItems);
+
+        return new SellItemManager(shopItems, sqliteHelper);
+
     }
-
-
-
-    public void save() {
-        Config config = new Config(TheWorldShopMainClass.MAIN_INSTANCE.getDataFolder()+"/items.yml",Config.YAML);
-        List<Map<?,?>> list = new ArrayList<>();
-        LinkedHashMap<String, Object> map;
-        for(ShopItem shopItem: sellItems){
-            map = new LinkedHashMap<>();
-            try{
-                CompoundTag compoundTag = NBTIO.putItemHelper(shopItem.getDefaultItem());
-                String by = new String(NBTIO.write(compoundTag), StandardCharsets.UTF_8);
-                map.put("item", by);
-            }catch (Exception ignore){
-                map.put("id",shopItem.getDefaultItem().getId()+":"+shopItem.getDefaultItem().getDamage());
-                map.put("count",shopItem.getDefaultItem().getCount());
-                if(shopItem.getDefaultItem().hasCompoundTag()) {
-                    map.put("tag", Tool.bytesToHexString(shopItem.getDefaultItem().getCompoundTag()));
-                }else{
-                    map.put("tag","not");
-                }
-            }
-            map.put("uuid",shopItem.uuid.toString());
-            map.put("limit",shopItem.limit);
-            map.put("moneyType",shopItem.getMoneyType().toString());
-            map.put("sellPlayer",shopItem.getSellPlayer());
-            map.put("sellMoney",shopItem.getSellMoney());
-            map.put("isRemove",shopItem.isRemove());
-            list.add(map);
-        }
-        config.set("sell",list);
-        config.save();
-    }
+//
+//    public void save() {
+//        List<ShopItemSQLData> shopItemSQLData = new ArrayList<>();
+//        for(ShopItem shopItem: sellItems){
+//            shopItemSQLData.add(ShopItemSQLData.shopItem2SQLData(shopItem));
+//        }
+//        sqliteHelper.set
+//
+//
+////        Config config = new Config(TheWorldShopMainClass.MAIN_INSTANCE.getDataFolder()+"/items.yml",Config.YAML);
+////        List<Map<?,?>> list = new ArrayList<>();
+////        LinkedHashMap<String, Object> map;
+////        for(ShopItem shopItem: sellItems){
+////            map = new LinkedHashMap<>();
+////            try{
+////                CompoundTag compoundTag = NBTIO.putItemHelper(shopItem.getDefaultItem());
+////                String by = new String(NBTIO.write(compoundTag), StandardCharsets.UTF_8);
+////                map.put("item", by);
+////            }catch (Exception ignore){
+////                map.put("id",shopItem.getDefaultItem().getId()+":"+shopItem.getDefaultItem().getDamage());
+////                map.put("count",shopItem.getDefaultItem().getCount());
+////                if(shopItem.getDefaultItem().hasCompoundTag()) {
+////                    map.put("tag", Tool.bytesToHexString(shopItem.getDefaultItem().getCompoundTag()));
+////                }else{
+////                    map.put("tag","not");
+////                }
+////            }
+////            map.put("uuid",shopItem.uuid.toString());
+////            map.put("limit",shopItem.limit);
+////            map.put("moneyType",shopItem.getMoneyType().toString());
+////            map.put("sellPlayer",shopItem.getSellPlayer());
+////            map.put("sellMoney",shopItem.getSellMoney());
+////            map.put("isRemove",shopItem.isRemove());
+////            list.add(map);
+////        }
+////        config.set("sell",list);
+////        config.save();
+//    }
 
 }

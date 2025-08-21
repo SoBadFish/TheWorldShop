@@ -72,7 +72,7 @@ public class DisplayPanel implements InventoryHolder {
             }
         }
         int maxPage = 1;
-        if(shopItems.size() > 0) {
+        if(!shopItems.isEmpty()) {
             maxPage = SellItemManager.mathShopItemPage(shopItems);
             if(page > maxPage){
                 page = maxPage;

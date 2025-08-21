@@ -59,7 +59,7 @@ public class PlayerInfoManager {
 
     public void setChoseItem(Item choseItem) {
         if(choseItem != null){
-            this.choseItem = Item.get(choseItem.getId(),choseItem.getDamage());
+            this.choseItem = choseItem;
         }else{
             this.choseItem = null;
         }

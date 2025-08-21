@@ -51,6 +51,14 @@ public class MoneySellItem {
 
     public enum MoneyType{
         /**Economy PlayerPoints Money*/
-        EconomyAPI,PlayerPoints,Money
+        EconomyAPI,PlayerPoints,Money;
+        public static MoneyType get(String string){
+            for(MoneyType type : MoneyType.values()){
+                if(type.name().equalsIgnoreCase(string)){
+                    return type;
+                }
+            }
+            return null;
+        }
     }
 }

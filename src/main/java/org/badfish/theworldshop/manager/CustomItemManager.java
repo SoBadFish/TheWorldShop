@@ -109,4 +109,19 @@ public class CustomItemManager {
         return "";
 
     }
+
+    public void reload(Config config) {
+        ArrayList<CustomItem> items = new ArrayList<>();
+        String name;
+        for(Map.Entry<String, Object> map: config.getAll().entrySet()){
+            name = map.getKey();
+            String msg = map.getValue().toString();
+            Item item = toItem(msg);
+            if(item != null){
+                items.add(new CustomItem(name,item));
+            }
+        }
+        this.items.clear();
+        this.items.addAll(items);
+    }
 }
