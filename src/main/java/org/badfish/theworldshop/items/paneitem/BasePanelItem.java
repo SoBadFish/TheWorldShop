@@ -1,6 +1,7 @@
 package org.badfish.theworldshop.items.paneitem;
 
 import cn.nukkit.item.Item;
+import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
 import org.badfish.theworldshop.items.ItemType;
@@ -25,7 +26,7 @@ public abstract class BasePanelItem {
         tag.putString(ShopItem.TAG + "tag", "ShopItem");
         tag.putString(ShopItem.TAG + "type", type.getName());
         item.setNamedTag(tag);
-        if(lore.size() > 0) {
+        if(!lore.isEmpty()) {
             item.setLore(lore.toArray(new String[0]));
         }
 
@@ -34,17 +35,18 @@ public abstract class BasePanelItem {
 
     protected static Item getItemByTag(Item item) {
         CompoundTag tag = item.getNamedTag();
-        String ss = tag.getString("defaultItem");
-        String[] li = ss.split(":");
-        Item item1 = Item.get(Integer.parseInt(li[0]),Integer.parseInt(li[1]),Integer.parseInt(li[2]));
-        if(!"not".equalsIgnoreCase(li[3])){
-            byte[] b = Tool.hexStringToBytes(li[3]);
-            if(b != null) {
-                CompoundTag compoundTag = Item.parseCompoundTag(b);
-                item1.setNamedTag(compoundTag);
-            }
-        }
-        return item1;
+        CompoundTag ss = tag.getCompound("defaultItem");
+        return NBTIO.getItemHelper(ss);
+//        String[] li = ss.split(":");
+//        Item item1 = Item.get(Integer.parseInt(li[0]),Integer.parseInt(li[1]),Integer.parseInt(li[2]));
+//        if(!"not".equalsIgnoreCase(li[3])){
+//            byte[] b = Tool.hexStringToBytes(li[3]);
+//            if(b != null) {
+//                CompoundTag compoundTag = Item.parseCompoundTag(b);
+//                item1.setNamedTag(compoundTag);
+//            }
+//        }
+//        return item1;
 
 
 //        return NBTIO.getItemHelper(tag.getCompound("defaultItem"));
@@ -53,12 +55,12 @@ public abstract class BasePanelItem {
     protected static Item saveItem(Item saveItem, Item i) {
         Item s = saveItem.clone();
         CompoundTag tag = i.getNamedTag();
-        String sa = "not";
-        if(s.hasCompoundTag()){
-            sa = Tool.bytesToHexString(s.getCompoundTag());
-        }
-        sa = s.getId() + ":" + s.getDamage() + ":" + s.getCount() + ":" + sa;
-        tag.putString("defaultItem",sa);
+//        String sa = "not";
+//        if(s.hasCompoundTag()){
+//            sa = Tool.bytesToHexString(s.getCompoundTag());
+//        }
+//        sa = s.getId() + ":" + s.getDamage() + ":" + s.getCount() + ":" + sa;
+        tag.putCompound("defaultItem",NBTIO.putItemHelper(s));
         i.setNamedTag(tag);
         return i;
     }

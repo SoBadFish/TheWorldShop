@@ -1,13 +1,13 @@
 package org.badfish.theworldshop.language;
 
 
-import lombok.Data;
+
 
 /**
  * 转义变量
  * @author BadFish
  */
-@Data
+
 public class TransferVariable {
 
     private int var;
@@ -24,6 +24,19 @@ public class TransferVariable {
         this.value = value.toString();
     }
 
+    public int getVar() {
+        return var;
+    }
 
+    public String getValue() {
+        return value;
+    }
 
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public void setVar(int var) {
+        this.var = var;
+    }
 }

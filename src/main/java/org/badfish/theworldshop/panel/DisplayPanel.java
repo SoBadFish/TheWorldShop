@@ -7,6 +7,7 @@ import cn.nukkit.inventory.Inventory;
 
 import cn.nukkit.inventory.InventoryHolder;
 import cn.nukkit.item.Item;
+import cn.nukkit.scheduler.PluginTask;
 import cn.nukkit.utils.TextFormat;
 import org.badfish.theworldshop.TheWorldShopMainClass;
 import org.badfish.theworldshop.items.ItemType;
@@ -393,7 +394,13 @@ public class DisplayPanel implements InventoryHolder {
         panel.setContents(itemMap);
         panel.id = Entity.entityCount++;
         inventory = panel;
-        player.addWindow(panel);
+
+        Server.getInstance().getScheduler().scheduleDelayedTask(TheWorldShopMainClass.MAIN_INSTANCE, new PluginTask<TheWorldShopMainClass>(TheWorldShopMainClass.MAIN_INSTANCE) {
+            @Override
+            public void onRun(int i) {
+                player.addWindow(panel);
+            }
+        },10);
 
     }
 
@@ -405,7 +412,13 @@ public class DisplayPanel implements InventoryHolder {
         panel.id = Entity.entityCount++;
         TheWorldShopMainClass.CLICK_PANEL.put(player,panel);
         inventory = panel;
-        player.addWindow(panel);
+        Server.getInstance().getScheduler().scheduleDelayedTask(TheWorldShopMainClass.MAIN_INSTANCE, new PluginTask<TheWorldShopMainClass>(TheWorldShopMainClass.MAIN_INSTANCE) {
+            @Override
+            public void onRun(int i) {
+                player.addWindow(panel);
+            }
+        },10);
+
     }
 
     @Override

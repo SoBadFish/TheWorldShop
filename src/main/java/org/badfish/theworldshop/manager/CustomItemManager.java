@@ -1,13 +1,17 @@
 package org.badfish.theworldshop.manager;
 
 import cn.nukkit.item.Item;
+import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.Config;
 import org.badfish.theworldshop.TheWorldShopMainClass;
 import org.badfish.theworldshop.items.CustomItem;
 import org.badfish.theworldshop.utils.Tool;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Map;
 
 /**
@@ -76,18 +80,13 @@ public class CustomItemManager {
 
     private static Item toItem(String str){
         if(!"".equals(str)){
-            String[] strings = str.split(":");
-            Item item = new Item(Integer.parseInt(strings[0]),Integer.parseInt(strings[1]));
-            if(strings.length > 2) {
-                if (!"not".equals(strings[2])) {
-                    byte[] bytes = Tool.hexStringToBytes(strings[2]);
-                    if (bytes != null) {
-                        CompoundTag tag = Item.parseCompoundTag(bytes);
-                        item.setNamedTag(tag);
-                    }
-                }
+            byte[] decoded = Base64.getDecoder().decode(str);
+            try {
+                CompoundTag tag = NBTIO.read(decoded);
+                return NBTIO.getItemHelper(tag);
+            } catch (IOException e) {
+                return null;
             }
-            return item;
         }
         return null;
     }
@@ -103,11 +102,11 @@ public class CustomItemManager {
     }
 
     private String toStringItem(Item item){
-        String tag = "not";
-        if(item.hasCompoundTag()){
-            tag = Tool.bytesToHexString(item.getCompoundTag());
-        }
-        return item.getId()+":"+item.getDamage()+":"+tag;
+        try {
+            return new String(Base64.getEncoder().encode(NBTIO.write(NBTIO.putItemHelper(item))));
+        } catch (IOException ignore) {}
+
+        return "";
 
     }
 }

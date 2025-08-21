@@ -1,6 +1,8 @@
 package org.badfish.theworldshop;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
+import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
@@ -122,29 +124,57 @@ public class TheWorldShopMainClass extends PluginBase {
         }
     }
 
+    public static String CORE_NAME = "";
     private void checkServer(){
         boolean ver = false;
         //双核心兼容
+        CORE_NAME = "Nukkit";
         try {
             Class<?> c = Class.forName("cn.nukkit.Nukkit");
             c.getField("NUKKIT_PM1E");
             ver = true;
+            CORE_NAME = "Nukkit PM1E";
+
 
         } catch (ClassNotFoundException | NoSuchFieldException ignore) { }
         try {
             Class<?> c = Class.forName("cn.nukkit.Nukkit");
-            c.getField("NUKKIT").get(c).toString().equalsIgnoreCase("Nukkit PetteriM1 Edition");
+            CORE_NAME = c.getField("NUKKIT").get(c).toString();
+
             ver = true;
+
         } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException ignore) {
         }
 
+
         AbstractFakeInventory.IS_PM1E = ver;
         if(ver){
-            this.getLogger().info(language.getLang(language.loadInfo3));
-        }else{
-            this.getLogger().info(language.getLang(language.loadInfo4));
+            Server.getInstance().enableExperimentMode = true;
+            Server.getInstance().forceResources = true;
         }
+        sendMessageToConsole("&e当前核心为 "+CORE_NAME);
     }
+
+    public static void sendMessageToConsole(String msg){
+        sendMessageToObject(msg,null);
+    }
+    public static void sendMessageToObject(String msg, Object o){
+        String message = TextFormat.colorize('&',TITLE+" &r"+msg);
+        if(o != null){
+            if(o instanceof Player){
+                if(((Player) o).isOnline()) {
+                    ((Player) o).sendMessage(message);
+                    return;
+                }
+            }
+            if(o instanceof EntityHuman){
+                message = ((EntityHuman) o).getName()+"->"+message;
+            }
+        }
+        MAIN_INSTANCE.getLogger().info(message);
+
+    }
+
 
 
     @Override
